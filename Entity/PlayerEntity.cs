@@ -1,7 +1,12 @@
 using Godot;
 
-public partial class PlayerEntity : Sprite2D, IDebuggable
+public partial class PlayerEntity : CharacterBody2D, IDebuggable
 {
+    // Nodes
+    private Camera2D playerCamera;
+    private AnimatedSprite2D playerSprite;
+    private CollisionShape2D playerCollision;
+
     // Health, Stamina and Adrenaline
     [Export] public float MaxHealth = 100.0f;
     [Export] public float MaxStamina = 100.0f;
@@ -16,9 +21,9 @@ public partial class PlayerEntity : Sprite2D, IDebuggable
 
     // Movement
     [Export] public float MaximumVelocity = 2.0F;
-    [Export] public float Inertia = 50.0F;
-    [Export] public float Deceleration = 10.0F;
-    [Export] public float SprintVelocityModifier = 2.0F;
+    [Export] public float Inertia = 40.0F;
+    [Export] public float Deceleration = 12.0F;
+    [Export] public float SprintVelocityModifier = 2.3F;
     [Export] public float LookSens = 5.0f;
     [Export] public float AimPenaltyModifier = 0.75f;
     private Vector2 MovementVelocity;
@@ -26,26 +31,45 @@ public partial class PlayerEntity : Sprite2D, IDebuggable
 
     // Camera
     [Export] public float CameraSmoothSpeed = 5.0f;
-    private Camera2D entityCamera;
 
+    // Animation
+    [Export] public bool UseStaticPlaceholder = true;
 
     public override void _Ready()
     {
+        playerCamera = GetNode<Camera2D>("PlayerCamera");
+        playerSprite = GetNode<AnimatedSprite2D>("PlayerSprite");
+        playerCollision = GetNode<CollisionShape2D>("PlayerCollision");
+
+        if (playerCamera == null ||  playerSprite == null || playerCollision == null)
+        {
+            throw new System.InvalidOperationException(
+            $"[PlayerEntity Fatal Error]: Required child nodes are missing from the scene tree!\n" +
+            $"-> PlayerCamera found: {playerCamera != null}\n" +
+            $"-> PlayerSprite found: {playerSprite != null}\n" +
+            $"-> PlayerCollision found: {playerCollision != null}\n" +
+            $"Please check that child node names match exactly in the Godot Editor scene dock."
+        );
+        }
+
         CurrentHealth = MaxHealth;
         CurrentStamina = MaxStamina;
         CurrentAdrenaline = 0.0f;
 
         MovementVelocity = new Vector2(0, 0);
         isMoving = false;
+    }
 
-        entityCamera = GetNode<Camera2D>("PlayerCamera");
+    public override void _PhysicsProcess(double delta)
+    {
+        HandleInput(delta);
+        Move(delta);
     }
 
     public override void _Process(double delta)
     {
-        HandleInput(delta);
-        Move(delta);
         UpdateCamera(delta);
+        UpdateAnimations();
     }
 
     private void HandleInput(double delta)
@@ -127,14 +151,41 @@ public partial class PlayerEntity : Sprite2D, IDebuggable
     {
         float currentResistance = isMoving ? Inertia : Deceleration;
 
-        Position += ((MovementVelocity * 60.0F) * (float)delta);
+        Velocity = MovementVelocity * 60.0f;
+        MoveAndSlide();
+        MovementVelocity = Velocity / 60.0f;
+
         MovementVelocity += Vector2.Zero - (((MovementVelocity / currentResistance) * 60.0F) * (float)delta);
     }
 
     private void UpdateCamera(double delta)
     {
-        if (entityCamera == null) return;
-        entityCamera.Position = entityCamera.Position.Lerp(Vector2.Zero, CameraSmoothSpeed * (float)delta);
+        if (playerCamera == null) return;
+        playerCamera.Position = playerCamera.Position.Lerp(Vector2.Zero, CameraSmoothSpeed * (float)delta);
+    }
+
+    private void UpdateAnimations()
+    {
+        if (playerSprite == null) return;
+
+        // If using a placeholder, stop here so no walk/sprint loops trigger
+        if (UseStaticPlaceholder)
+        {
+            playerSprite.Stop(); // Freezes the animation loop
+            return;
+        }
+
+        bool isSprinting = Input.IsActionPressed("sprint") && MovementVelocity.Length() > 0.1f;
+
+        if (isMoving && MovementVelocity.Length() > 0.1f)
+        {
+            if (isSprinting) playerSprite.Play("sprint");
+            else playerSprite.Play("walk");
+        }
+        else
+        {
+            playerSprite.Play("idle");
+        }
     }
 
 

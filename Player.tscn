@@ -3,8 +3,49 @@
 [ext_resource type="Texture2D" uid="uid://cgyw0tgfyacvo" path="res://icon.svg" id="1_kpjcp"]
 [ext_resource type="Script" uid="uid://d0gmuq6mqxl6t" path="res://Entity/PlayerEntity.cs" id="1_xhfnw"]
 
-[node name="PlayerEntity" type="Sprite2D" unique_id=615078431]
-texture = ExtResource("1_kpjcp")
+[sub_resource type="SpriteFrames" id="SpriteFrames_vnn0b"]
+animations = [{
+"frames": [],
+"loop": 1,
+"name": &"dash",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": 1,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_kpjcp")
+}],
+"loop": 1,
+"name": &"placeholder",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": 1,
+"name": &"sprint",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": 1,
+"name": &"walk",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_yeiif"]
+
+[node name="PlayerEntity" type="CharacterBody2D" unique_id=628374450]
+collision_mask = 6
+motion_mode = 1
 script = ExtResource("1_xhfnw")
 
 [node name="PlayerCamera" type="Camera2D" parent="." unique_id=1881215488]
+
+[node name="PlayerSprite" type="AnimatedSprite2D" parent="." unique_id=720325767]
+sprite_frames = SubResource("SpriteFrames_vnn0b")
+animation = &"placeholder"
+
+[node name="PlayerCollision" type="CollisionShape2D" parent="." unique_id=1138674615]
+shape = SubResource("CircleShape2D_yeiif")
