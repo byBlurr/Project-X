@@ -11,7 +11,7 @@ script = ExtResource("1_xxdj2")
 position = Vector2(576, 325)
 
 [node name="EnemySpawner" parent="." unique_id=1233573892 instance=ExtResource("3_xxdj2")]
-position = Vector2(148, 520)
+position = Vector2(150, 518)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=798019279]
 

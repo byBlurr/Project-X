@@ -255,7 +255,15 @@ public partial class PlayerEntity : CharacterBody2D, IDebuggable
         MoveAndSlide();
         MovementVelocity = Velocity / 60.0f;
 
-        MovementVelocity += Vector2.Zero - (((MovementVelocity / currentResistance) * 60.0F) * (float)delta);
+        Vector2 frictionChange = ((MovementVelocity / currentResistance) * 60.0f) * (float)delta;
+
+        if (Mathf.Abs(MovementVelocity.X) <= Mathf.Abs(frictionChange.X)) MovementVelocity.X = 0.0f;
+        else MovementVelocity.X -= frictionChange.X;
+
+        if (Mathf.Abs(MovementVelocity.Y) <= Mathf.Abs(frictionChange.Y)) MovementVelocity.Y = 0.0f;
+        else MovementVelocity.Y -= frictionChange.Y;
+
+        // MovementVelocity += Vector2.Zero - (((MovementVelocity / currentResistance) * 60.0F) * (float)delta);
     }
 
     private void UpdateCamera(double delta)
