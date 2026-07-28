@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://byd4gdw0jlh64"]
 
-[ext_resource type="PackedScene" uid="uid://cud2x017wvhhu" path="res://Player.tscn" id="1_jlwbg"]
+[ext_resource type="PackedScene" uid="uid://cud2x017wvhhu" path="res://Entity/Player.tscn" id="1_jlwbg"]
 [ext_resource type="Script" uid="uid://dn4kg7a2xyjh7" path="res://Core/DebugOverlay.cs" id="1_xxdj2"]
-[ext_resource type="PackedScene" uid="uid://d2ww302tgg883" path="res://TestEnemy.tscn" id="3_xxdj2"]
+[ext_resource type="PackedScene" uid="uid://c6l2ajsuq61l3" path="res://Entity/EnemySpawner.tscn" id="3_xxdj2"]
 
 [node name="TestMap" type="Node2D" unique_id=893102502]
 script = ExtResource("1_xxdj2")
@@ -10,8 +10,8 @@ script = ExtResource("1_xxdj2")
 [node name="PlayerEntity" parent="." unique_id=615078431 instance=ExtResource("1_jlwbg")]
 position = Vector2(576, 325)
 
-[node name="TestEnemy" parent="." unique_id=185742669 instance=ExtResource("3_xxdj2")]
-position = Vector2(270, 133)
+[node name="EnemySpawner" parent="." unique_id=1233573892 instance=ExtResource("3_xxdj2")]
+position = Vector2(148, 520)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=798019279]
 

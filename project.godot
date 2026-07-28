@@ -10,7 +10,9 @@ config_version=5
 
 [application]
 
-config/name="ProjectX"
+config/name="Project X"
+config/description="Another 2D top down shooter, kill em all"
+config/version="0.1"
 run/main_scene="uid://byd4gdw0jlh64"
 config/features=PackedStringArray("4.7", "C#", "Forward Plus")
 config/icon="res://icon.svg"
