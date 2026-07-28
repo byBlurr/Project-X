@@ -29,6 +29,16 @@ public partial class PlayerEntity : CharacterBody2D, IDebuggable
     private Vector2 MovementVelocity;
     private bool isMoving;
 
+    // Dashing
+    [Export] public float DashVelocity = 12.0f;
+    [Export] public float DashDuration = 0.25f;
+    [Export] public float DashStaminaCost = 40.0f;
+    [Export] public float DashAdrenalineCost = 50.0f;
+
+    private Vector2 dashDirection;
+    private float dashTimer = 0.0f;
+    private bool isDashing = false;
+
     // Camera
     [Export] public float CameraSmoothSpeed = 5.0f;
 
@@ -74,6 +84,34 @@ public partial class PlayerEntity : CharacterBody2D, IDebuggable
 
     private void HandleInput(double delta)
     {
+        if (isDashing)
+        {
+            dashTimer -= (float)delta;
+            if (dashTimer <= 0.0f)
+            {
+                isDashing = false;
+            }
+            return;
+        }
+
+        if (Input.IsActionJustPressed("dash") && TrySpendDashResources())
+        {
+            isDashing = true;
+            dashTimer = DashDuration;
+            
+            if (MovementVelocity != Vector2.Zero)
+            {
+                dashDirection = MovementVelocity.Normalized();
+            }
+            else
+            {
+                dashDirection = (GetGlobalMousePosition() - GlobalPosition).Normalized();
+            }
+
+            MovementVelocity = dashDirection * DashVelocity;
+            return;
+        }
+
         bool isSprinting = Input.IsActionPressed("sprint") && !Input.IsActionPressed("aim") && CurrentStamina > 0.0f;
         float velocityChange = MaximumVelocity / Inertia;
         if (isSprinting) velocityChange = velocityChange * SprintVelocityModifier;
@@ -116,6 +154,22 @@ public partial class PlayerEntity : CharacterBody2D, IDebuggable
         CurrentAdrenaline = Mathf.Max(0.0f, CurrentAdrenaline - adrenalineCost);
     }
 
+    private bool TrySpendDashResources()
+    {
+        if (CurrentStamina >= DashStaminaCost)
+        {
+            UseDashResourceCost(DashStaminaCost, 0.0f);
+            return true;
+        }
+        else if (CurrentAdrenaline >= DashAdrenalineCost)
+        {
+            UseDashResourceCost(0.0f, DashAdrenalineCost);
+            return true;
+        }
+
+        return false;
+    }
+
     private float ApplyAimPenalty(float currentMaxSpeed)
     {
         if (Input.IsActionPressed("aim") && MovementVelocity != Vector2.Zero)
@@ -149,6 +203,14 @@ public partial class PlayerEntity : CharacterBody2D, IDebuggable
 
     public void Move(double delta)
     {
+        if (isDashing)
+        {
+            Velocity = MovementVelocity * 60.0f;
+            MoveAndSlide();
+            MovementVelocity = Velocity / 60.0f;
+            return;
+        }
+
         float currentResistance = isMoving ? Inertia : Deceleration;
 
         Velocity = MovementVelocity * 60.0f;
