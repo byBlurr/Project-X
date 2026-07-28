@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://cud2x017wvhhu"]
+
+[ext_resource type="Texture2D" uid="uid://cgyw0tgfyacvo" path="res://icon.svg" id="1_kpjcp"]
+[ext_resource type="Script" uid="uid://d0gmuq6mqxl6t" path="res://Entity/PlayerEntity.cs" id="1_xhfnw"]
+
+[node name="PlayerEntity" type="Sprite2D" unique_id=615078431]
+texture = ExtResource("1_kpjcp")
+script = ExtResource("1_xhfnw")
+
+[node name="PlayerCamera" type="Camera2D" parent="." unique_id=1881215488]
