@@ -1,9 +1,11 @@
 [gd_scene format=3 uid="uid://byd4gdw0jlh64"]
 
 [ext_resource type="PackedScene" uid="uid://cud2x017wvhhu" path="res://Player.tscn" id="1_jlwbg"]
+[ext_resource type="Script" uid="uid://dn4kg7a2xyjh7" path="res://Core/DebugOverlay.cs" id="1_xxdj2"]
 [ext_resource type="Texture2D" uid="uid://cgyw0tgfyacvo" path="res://icon.svg" id="2_g3g4i"]
 
 [node name="TestMap" type="Node2D" unique_id=893102502]
+script = ExtResource("1_xxdj2")
 
 [node name="PlayerEntity" parent="." unique_id=615078431 instance=ExtResource("1_jlwbg")]
 position = Vector2(576, 325)
@@ -23,3 +25,9 @@ texture = ExtResource("2_g3g4i")
 [node name="Icon4" type="Sprite2D" parent="." unique_id=1581271512]
 position = Vector2(798, 128)
 texture = ExtResource("2_g3g4i")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=798019279]
+
+[node name="DebugLabel" type="Label" parent="CanvasLayer" unique_id=346706226]
+offset_right = 1152.0
+offset_bottom = 649.0

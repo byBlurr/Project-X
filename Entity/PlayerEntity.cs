@@ -1,6 +1,6 @@
 using Godot;
 
-public partial class PlayerEntity : Sprite2D
+public partial class PlayerEntity : Sprite2D, IDebuggable
 {
     // Health, Stamina and Adrenaline
     [Export] public float MaxHealth = 100.0f;
@@ -137,4 +137,14 @@ public partial class PlayerEntity : Sprite2D
         entityCamera.Position = entityCamera.Position.Lerp(Vector2.Zero, CameraSmoothSpeed * (float)delta);
     }
 
+
+    // --- IDebuggable  ---
+    public string GetDebugText()
+    {
+        return $"[PLAYERENTITY]\n" +
+               $"Health: {CurrentHealth:F1} / {MaxHealth}\n" +
+               $"Stamina: {CurrentStamina:F1} / {MaxStamina}\n" +
+               $"Adrenaline: {CurrentAdrenaline:F1} / {MaxAdrenaline}\n" +
+               $"Velocity: {MovementVelocity.Length():F2}";
+    }
 }
