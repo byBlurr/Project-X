@@ -6,6 +6,8 @@ public partial class PlayerEntity : CharacterBody2D, IDebuggable
     private Camera2D playerCamera;
     private AnimatedSprite2D playerSprite;
     private CollisionShape2D playerCollision;
+    private Area2D playerRadar;
+    private CollisionShape2D playerRadarCollision;
 
     // Health, Stamina and Adrenaline
     [Export] public float MaxHealth = 100.0f;
@@ -14,6 +16,8 @@ public partial class PlayerEntity : CharacterBody2D, IDebuggable
     [Export] public float StaminaDrainRate = 5.0f;      // Points per second while sprinting
     [Export] public float StaminaWalkRegen = 10.0f;    // Points per second while walking
     [Export] public float StaminaIdleRegen = 25.0f;    // Points per second while stopped
+    [Export] public float AdrenalineProximityGainRate = 15.0f;
+    [Export] public float AdrenalinePassiveDecayRate = 2.0f;
 
     public float CurrentHealth { get; private set; }
     public float CurrentStamina { get; private set; }
@@ -50,16 +54,20 @@ public partial class PlayerEntity : CharacterBody2D, IDebuggable
         playerCamera = GetNode<Camera2D>("PlayerCamera");
         playerSprite = GetNode<AnimatedSprite2D>("PlayerSprite");
         playerCollision = GetNode<CollisionShape2D>("PlayerCollision");
+        playerRadar = GetNodeOrNull<Area2D>("PlayerRadar");
+        playerRadarCollision = playerRadar?.GetNodeOrNull<CollisionShape2D>("PlayerRadarCollision");
 
-        if (playerCamera == null ||  playerSprite == null || playerCollision == null)
+        if (playerCamera == null || playerSprite == null || playerCollision == null || playerRadar == null || playerRadarCollision == null)
         {
             throw new System.InvalidOperationException(
-            $"[PlayerEntity Fatal Error]: Required child nodes are missing from the scene tree!\n" +
-            $"-> PlayerCamera found: {playerCamera != null}\n" +
-            $"-> PlayerSprite found: {playerSprite != null}\n" +
-            $"-> PlayerCollision found: {playerCollision != null}\n" +
-            $"Please check that child node names match exactly in the Godot Editor scene dock."
-        );
+                $"[PlayerEntity Fatal Error]: Required child nodes are missing from the scene tree!\n" +
+                $"-> PlayerCamera found: {playerCamera != null}\n" +
+                $"-> PlayerSprite found: {playerSprite != null}\n" +
+                $"-> PlayerCollision found: {playerCollision != null}\n" +
+                $"-> PlayerRadar found: {playerRadar != null}\n" +
+                $"-> PlayerRadar Shape found: {playerRadarCollision != null}\n" +
+                $"Please check that child node names match exactly in the Godot Editor scene dock."
+            );
         }
 
         CurrentHealth = MaxHealth;
@@ -73,6 +81,7 @@ public partial class PlayerEntity : CharacterBody2D, IDebuggable
     public override void _PhysicsProcess(double delta)
     {
         HandleInput(delta);
+        ProcessAdrenalineProximity(delta);
         Move(delta);
     }
 
@@ -170,6 +179,35 @@ public partial class PlayerEntity : CharacterBody2D, IDebuggable
         return false;
     }
 
+    private void ProcessAdrenalineProximity(double delta)
+    {
+        if (playerRadar == null) return;
+
+        var overlappingBodies = playerRadar.GetOverlappingBodies();
+        int enemyCount = 0;
+
+        foreach (Node2D body in overlappingBodies)
+        {
+            if (body == this) continue;
+
+            if (body is CharacterBody2D || body.IsInGroup("enemies"))
+            {
+                enemyCount++;
+            }
+        }
+
+        if (enemyCount > 0)
+        {
+            float gainAmount = AdrenalineProximityGainRate * enemyCount * (float)delta;
+            CurrentAdrenaline = Mathf.Min(MaxAdrenaline, CurrentAdrenaline + gainAmount);
+        }
+        else
+        {
+            float decayAmount = AdrenalinePassiveDecayRate * (float)delta;
+            CurrentAdrenaline = Mathf.Max(0.0f, CurrentAdrenaline - decayAmount);
+        }
+    }
+
     private float ApplyAimPenalty(float currentMaxSpeed)
     {
         if (Input.IsActionPressed("aim") && MovementVelocity != Vector2.Zero)
@@ -258,6 +296,7 @@ public partial class PlayerEntity : CharacterBody2D, IDebuggable
                $"Health: {CurrentHealth:F1} / {MaxHealth}\n" +
                $"Stamina: {CurrentStamina:F1} / {MaxStamina}\n" +
                $"Adrenaline: {CurrentAdrenaline:F1} / {MaxAdrenaline}\n" +
-               $"Velocity: {MovementVelocity.Length():F2}";
+               $"Velocity: {MovementVelocity.Length():F2}\n" +
+               $"Is Dashing: {isDashing} | Dash Timer: {dashTimer:F2}";
     }
 }

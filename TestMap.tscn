@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://cud2x017wvhhu" path="res://Player.tscn" id="1_jlwbg"]
 [ext_resource type="Script" uid="uid://dn4kg7a2xyjh7" path="res://Core/DebugOverlay.cs" id="1_xxdj2"]
-[ext_resource type="Texture2D" uid="uid://cgyw0tgfyacvo" path="res://icon.svg" id="2_g3g4i"]
+[ext_resource type="PackedScene" uid="uid://d2ww302tgg883" path="res://TestEnemy.tscn" id="3_xxdj2"]
 
 [node name="TestMap" type="Node2D" unique_id=893102502]
 script = ExtResource("1_xxdj2")
@@ -10,21 +10,8 @@ script = ExtResource("1_xxdj2")
 [node name="PlayerEntity" parent="." unique_id=615078431 instance=ExtResource("1_jlwbg")]
 position = Vector2(576, 325)
 
-[node name="Icon" type="Sprite2D" parent="." unique_id=1326440439]
-position = Vector2(156, 126)
-texture = ExtResource("2_g3g4i")
-
-[node name="Icon2" type="Sprite2D" parent="." unique_id=1936472839]
-position = Vector2(181, 450)
-texture = ExtResource("2_g3g4i")
-
-[node name="Icon3" type="Sprite2D" parent="." unique_id=229249776]
-position = Vector2(828, 537)
-texture = ExtResource("2_g3g4i")
-
-[node name="Icon4" type="Sprite2D" parent="." unique_id=1581271512]
-position = Vector2(798, 128)
-texture = ExtResource("2_g3g4i")
+[node name="TestEnemy" parent="." unique_id=185742669 instance=ExtResource("3_xxdj2")]
+position = Vector2(270, 133)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=798019279]
 
