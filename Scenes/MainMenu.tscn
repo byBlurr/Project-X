@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://bewa3ugpqyhor"]
+
+[ext_resource type="Script" uid="uid://clg727u6y5b1n" path="res://Core/MainMenu.cs" id="1_tt5f1"]
+
+[node name="MainMenu" type="Control" unique_id=1349718086]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 4.0
+offset_right = 5.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_tt5f1")
+_gameplayScenePath = "res://TestMap.tscn"
+
+[node name="MainMenuButtons" type="VBoxContainer" parent="." unique_id=846724094]
+layout_mode = 0
+offset_left = 17.0
+offset_top = 154.0
+offset_right = 218.0
+offset_bottom = 443.0
+
+[node name="PlayButton" type="Button" parent="MainMenuButtons" unique_id=1328618327]
+layout_mode = 2
+text = "Play"
+
+[node name="SettingsButton" type="Button" parent="MainMenuButtons" unique_id=1781574637]
+layout_mode = 2
+text = "Settings"
+
+[node name="ExitButton" type="Button" parent="MainMenuButtons" unique_id=708998519]
+layout_mode = 2
+text = "Exit"
