@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cud2x017wvhhu"]
 
-[ext_resource type="Script" uid="uid://d0gmuq6mqxl6t" path="res://Entity/PlayerEntity.cs" id="1_xhfnw"]
+[ext_resource type="Script" uid="uid://d0gmuq6mqxl6t" path="res://Entity/Scripts/PlayerEntity.cs" id="1_xhfnw"]
 [ext_resource type="Texture2D" uid="uid://6c60n7x7lgqa" path="res://Sprites/Placeholder/player.png" id="2_oklip"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_vnn0b"]

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://d2ww302tgg883"]
 
-[ext_resource type="Script" uid="uid://uujwvc0umrah" path="res://Entity/EnemyEntity.cs" id="1_li1q3"]
+[ext_resource type="Script" uid="uid://uujwvc0umrah" path="res://Entity/Scripts/EnemyEntity.cs" id="1_li1q3"]
 [ext_resource type="Texture2D" uid="uid://bpoe3wlk3eqcn" path="res://Sprites/Placeholder/zombie.png" id="2_li1q3"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_yeiif"]
