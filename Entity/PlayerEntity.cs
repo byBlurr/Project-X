@@ -16,11 +16,11 @@ public partial class PlayerEntity : CharacterBody2D, IDebuggable, IPausable
 	[Export] public float MaxHealth = 100.0f;
 	[Export] public float MaxStamina = 100.0f;
 	[Export] public float MaxAdrenaline = 100.0f;
-	[Export] public float StaminaDrainRate = 5.0f;      // Points per second while sprinting
-	[Export] public float StaminaWalkRegen = 10.0f;    // Points per second while walking
-	[Export] public float StaminaIdleRegen = 25.0f;    // Points per second while stopped
-	[Export] public float AdrenalineProximityGainRate = 15.0f;
-	[Export] public float AdrenalinePassiveDecayRate = 2.0f;
+	[Export] public float StaminaDrainRate = 1.0f;      // Points per second while sprinting
+	[Export] public float StaminaWalkRegen = 8.0f;    // Points per second while walking
+	[Export] public float StaminaIdleRegen = 20.0f;    // Points per second while stopped
+	[Export] public float AdrenalineProximityGainRate = 3.0f;
+	[Export] public float AdrenalinePassiveDecayRate = 1.0f;
 
 	public float CurrentHealth { get; private set; }
 	public float CurrentStamina { get; private set; }

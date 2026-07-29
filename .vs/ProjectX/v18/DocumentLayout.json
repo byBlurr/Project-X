@@ -3,20 +3,12 @@
   "WorkspaceRootPath": "E:\\Godot\\Projects\\project-x\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{FEC40992-AD09-4112-A264-87FD2D35752D}|ProjectX.csproj|e:\\godot\\projects\\project-x\\entity\\enemyspawner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FEC40992-AD09-4112-A264-87FD2D35752D}|ProjectX.csproj|solutionrelative:entity\\enemyspawner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{FEC40992-AD09-4112-A264-87FD2D35752D}|ProjectX.csproj|e:\\godot\\projects\\project-x\\interfaces\\ipausable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FEC40992-AD09-4112-A264-87FD2D35752D}|ProjectX.csproj|solutionrelative:interfaces\\ipausable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{FEC40992-AD09-4112-A264-87FD2D35752D}|ProjectX.csproj|e:\\godot\\projects\\project-x\\entity\\enemyentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FEC40992-AD09-4112-A264-87FD2D35752D}|ProjectX.csproj|solutionrelative:entity\\enemyentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{FEC40992-AD09-4112-A264-87FD2D35752D}|ProjectX.csproj|e:\\godot\\projects\\project-x\\entity\\playerentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{FEC40992-AD09-4112-A264-87FD2D35752D}|ProjectX.csproj|solutionrelative:entity\\playerentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|E:\\Godot\\Projects\\project-x\\GameController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:GameController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,58 +18,32 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "PlayerEntity.cs",
               "DocumentMoniker": "E:\\Godot\\Projects\\project-x\\Entity\\PlayerEntity.cs",
               "RelativeDocumentMoniker": "Entity\\PlayerEntity.cs",
               "ToolTip": "E:\\Godot\\Projects\\project-x\\Entity\\PlayerEntity.cs",
               "RelativeToolTip": "Entity\\PlayerEntity.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAIEAAAAAAAAAAAAmwKAAAABhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-29T16:21:54.211Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "IPausable.cs",
-              "DocumentMoniker": "E:\\Godot\\Projects\\project-x\\Interfaces\\IPausable.cs",
-              "RelativeDocumentMoniker": "Interfaces\\IPausable.cs",
-              "ToolTip": "E:\\Godot\\Projects\\project-x\\Interfaces\\IPausable.cs",
-              "RelativeToolTip": "Interfaces\\IPausable.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-29T16:21:30.983Z",
+              "WhenOpened": "2026-07-29T16:26:37.825Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "EnemySpawner.cs",
-              "DocumentMoniker": "E:\\Godot\\Projects\\project-x\\Entity\\EnemySpawner.cs",
-              "RelativeDocumentMoniker": "Entity\\EnemySpawner.cs",
-              "ToolTip": "E:\\Godot\\Projects\\project-x\\Entity\\EnemySpawner.cs",
-              "RelativeToolTip": "Entity\\EnemySpawner.cs",
-              "ViewState": "AgIAABMAAAAAAAAAAAAgwBkAAAAbAAAAAAAAAA==",
+              "Title": "EnemyEntity.cs",
+              "DocumentMoniker": "E:\\Godot\\Projects\\project-x\\Entity\\EnemyEntity.cs",
+              "RelativeDocumentMoniker": "Entity\\EnemyEntity.cs",
+              "ToolTip": "E:\\Godot\\Projects\\project-x\\Entity\\EnemyEntity.cs",
+              "RelativeToolTip": "Entity\\EnemyEntity.cs",
+              "ViewState": "AgIAAFYAAAAAAAAAAAAuwHsAAAAEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-29T16:21:04.743Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "GameController.cs",
-              "DocumentMoniker": "E:\\Godot\\Projects\\project-x\\GameController.cs",
-              "RelativeDocumentMoniker": "GameController.cs",
-              "ToolTip": "E:\\Godot\\Projects\\project-x\\GameController.cs",
-              "RelativeToolTip": "GameController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAmAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-29T16:12:00.699Z",
+              "WhenOpened": "2026-07-29T16:26:34.155Z",
               "EditorCaption": ""
             }
           ]

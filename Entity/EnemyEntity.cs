@@ -6,16 +6,19 @@ public partial class EnemyEntity : CharacterBody2D, IPausable
 	private bool _paused;
     
 	// Thresholds
-	[Export] public float ChaseThreshold { get; set; } = 750f;
-	[Export] public float RandomMoveThreshold { get; set; } = 2000f;
+	[Export] public float ChaseThreshold { get; set; } = 1000f;
+	[Export] public float RandomMoveThreshold { get; set; } = 2500f;
 	private float _chaseThresholdSq;
 	private float _randomMoveThresholdSq;
-    
-	// Movement
-	[Export] public float ChaseSpeed { get; set; } = 125f;
-	[Export] public float Acceleration { get; set; } = 10f;
-	[Export] public float LookSens = 5.0f;
-	private bool _isChasing;
+
+    // Movement
+    [Export] public float MaximumVelocity = 3.0F;
+    [Export] public float Inertia = 25.0F;
+    [Export] public float Deceleration = 10.0F;
+    [Export] public float LookSens = 4.0f;
+    private Vector2 _movementVelocity;
+    private bool _isMoving;
+    private bool _isChasing;
 	private Vector2 _targetLocation;
 
 	public override void _Ready()
@@ -29,28 +32,33 @@ public partial class EnemyEntity : CharacterBody2D, IPausable
 
 		_isChasing = false;
 		_targetLocation = RandomLocation();
-	}
+
+        _movementVelocity = new Vector2(0, 0);
+        _isMoving = false;
+    }
 
 	public override void _Process(double delta)
 	{
 		if (_paused) return;
-	}
+        if (_player == null) return;
+    }
 
 	public override void _PhysicsProcess(double delta)
 	{
 		if (_paused) return;
 		if (_player == null) return;
-		
-		float distanceSq = GlobalPosition.DistanceSquaredTo(_player.GlobalPosition);
 
-		if (distanceSq <= _chaseThresholdSq || _isChasing) ChasePlayer(distanceSq);
-		else if (distanceSq <= _randomMoveThresholdSq) MoveRandomly();
-		else ApproachPlayer();
 
-		LookTowardsVelocityOrPlayer(delta);
+        float distanceSq = GlobalPosition.DistanceSquaredTo(_player.GlobalPosition);
+
+        if (distanceSq <= _chaseThresholdSq || _isChasing) ChasePlayer(delta, distanceSq);
+        else if (distanceSq <= _randomMoveThresholdSq) MoveRandomly(delta);
+        else ApproachPlayer(delta);
+
+        LookTowardsVelocityOrPlayer(delta);
 	}
 
-	private void ChasePlayer(float distanceSq)
+	private void ChasePlayer(double delta, float distanceSq)
 	{
 		_isChasing = true;
 		
@@ -58,39 +66,62 @@ public partial class EnemyEntity : CharacterBody2D, IPausable
 		else
 		{
 			Vector2 direction = GlobalPosition.DirectionTo(_player.GlobalPosition);
-			Vector2 targetVelocity = direction * ChaseSpeed;
-			Velocity = Velocity.Lerp(targetVelocity, Acceleration * (float)GetPhysicsProcessDeltaTime());
-		}
+            float velocityChange = MaximumVelocity / Inertia;
+			_movementVelocity = _movementVelocity += (direction * velocityChange);
+			_movementVelocity = _movementVelocity.LimitLength(MaximumVelocity);
+            _movementVelocity = _movementVelocity.Clamp(-MaximumVelocity, MaximumVelocity);
+        }
 
-		MoveAndSlide();
-		if (distanceSq >= (_chaseThresholdSq * 1.5)) _isChasing = false;
+        Move(delta);
+        if (distanceSq >= (_chaseThresholdSq * 1.5)) _isChasing = false;
 	}
 
-	private void MoveRandomly()
+	private void MoveRandomly(double delta)
 	{
 		if (GlobalPosition.DistanceSquaredTo(_targetLocation) < 100 || Velocity == Vector2.Zero) _targetLocation = RandomLocation();
 		
 		Vector2 direction = GlobalPosition.DirectionTo(_targetLocation);
-		Vector2 targetVelocity = direction * ChaseSpeed;
-		Velocity = Velocity.Lerp(targetVelocity, Acceleration * (float)GetPhysicsProcessDeltaTime());
-		MoveAndSlide();
-	}
+        float velocityChange = MaximumVelocity / Inertia;
+        _movementVelocity = _movementVelocity += (direction * velocityChange);
+        _movementVelocity = _movementVelocity.LimitLength(MaximumVelocity);
+        _movementVelocity = _movementVelocity.Clamp(-MaximumVelocity, MaximumVelocity);
+        Move(delta);
+    }
 
-	private void ApproachPlayer()
+	private void ApproachPlayer(double delta)
 	{
 		Vector2 direction = GlobalPosition.DirectionTo(_player.GlobalPosition);
-		Vector2 targetVelocity = direction * ChaseSpeed;
-		Velocity = Velocity.Lerp(targetVelocity, Acceleration * (float)GetPhysicsProcessDeltaTime());
-		MoveAndSlide();
+        float velocityChange = MaximumVelocity / Inertia;
+        _movementVelocity = _movementVelocity += (direction * velocityChange);
+        _movementVelocity = _movementVelocity.LimitLength(MaximumVelocity);
+        _movementVelocity = _movementVelocity.Clamp(-MaximumVelocity, MaximumVelocity);
+        Move(delta);
 		_targetLocation = RandomLocation();
 	}
+
+	public void Move(double delta)
+	{
+        float currentResistance = _isMoving ? Inertia : Deceleration;
+
+        Velocity = _movementVelocity * 60.0f;
+        MoveAndSlide();
+        _movementVelocity = Velocity / 60.0f;
+
+        Vector2 frictionChange = ((_movementVelocity / currentResistance) * 60.0f) * (float)delta;
+
+        if (Mathf.Abs(_movementVelocity.X) <= Mathf.Abs(frictionChange.X)) _movementVelocity.X = 0.0f;
+        else _movementVelocity.X -= frictionChange.X;
+
+        if (Mathf.Abs(_movementVelocity.Y) <= Mathf.Abs(frictionChange.Y)) _movementVelocity.Y = 0.0f;
+        else _movementVelocity.Y -= frictionChange.Y;
+    }
 	
 	private void LookTowardsVelocityOrPlayer(double delta)
 	{
 		if (Velocity == Vector2.Zero) return;
 
 		float targetAngle = GlobalPosition.AngleToPoint(Position + Velocity);
-		if (_isChasing) targetAngle = GlobalPosition.AngleToPoint(_player.GlobalPosition);
+        if (_isChasing) targetAngle = (targetAngle + (GlobalPosition.AngleToPoint(_player.GlobalPosition) - targetAngle) / 2.0F);
 		float angleDifference = Mathf.AngleDifference(Rotation, targetAngle);
 		Rotate(angleDifference * LookSens * (float)delta);
 	}
