@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://c6l2ajsuq61l3" path="res://Entity/Placeable/EnemySpawner.tscn" id="3_j0g0q"]
 [ext_resource type="Script" uid="uid://dn4kg7a2xyjh7" path="res://Core/DebugOverlay.cs" id="4_e11n1"]
 [ext_resource type="PackedScene" uid="uid://bjc0x3xhvtkin" path="res://Scenes/PauseMenu.tscn" id="5_h5s6u"]
+[ext_resource type="Texture2D" uid="uid://cgyw0tgfyacvo" path="res://icon.svg" id="6_00jar"]
 
 [node name="TestMap" type="Node2D" unique_id=893102502]
 script = ExtResource("1_0314m")
@@ -36,3 +37,41 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 offset_top = 1.0
 offset_bottom = 1.0
+
+[node name="StatBars" type="VBoxContainer" parent="CanvasLayer" unique_id=2029140662]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -167.0
+offset_top = 15.0
+offset_right = -17.0
+offset_bottom = 98.0
+grow_horizontal = 0
+alignment = 2
+
+[node name="HealthBar" type="ProgressBar" parent="CanvasLayer/StatBars" unique_id=1486175581]
+custom_minimum_size = Vector2(150, 25)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.77254903, 0.11372549, 0.27058825, 1)
+value = 100.0
+
+[node name="StaminaBar" type="ProgressBar" parent="CanvasLayer/StatBars" unique_id=1729624858]
+custom_minimum_size = Vector2(150, 25)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.24313726, 0.6509804, 0.9490196, 1)
+value = 100.0
+
+[node name="AdrenalineBar" type="ProgressBar" parent="CanvasLayer/StatBars" unique_id=36165207]
+custom_minimum_size = Vector2(150, 25)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.12121413, 0.43921167, 0.56046253, 1)
+value = 100.0
+
+[node name="DashStatus" type="TextureRect" parent="CanvasLayer" unique_id=1755846396]
+visible = false
+offset_left = 907.0
+offset_top = 28.0
+offset_right = 971.0
+offset_bottom = 92.0
+texture = ExtResource("6_00jar")
+expand_mode = 1

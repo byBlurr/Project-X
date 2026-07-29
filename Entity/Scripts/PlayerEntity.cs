@@ -15,12 +15,12 @@ public partial class PlayerEntity : CharacterBody2D, IDebuggable, IPausable
 	// Health, Stamina and Adrenaline
 	[Export] public float MaxHealth = 100.0f;
 	[Export] public float MaxStamina = 100.0f;
-	[Export] public float MaxAdrenaline = 100.0f;
-	[Export] public float StaminaDrainRate = 1.0f;      // Points per second while sprinting
-	[Export] public float StaminaWalkRegen = 8.0f;    // Points per second while walking
-	[Export] public float StaminaIdleRegen = 20.0f;    // Points per second while stopped
-	[Export] public float AdrenalineProximityGainRate = 3.0f;
-	[Export] public float AdrenalinePassiveDecayRate = 1.0f;
+	[Export] public float MaxAdrenaline = 60.0f;
+	[Export] public float StaminaDrainRate = 1.1f;      // Points per second while sprinting
+	[Export] public float StaminaWalkRegen = 5.0f;    // Points per second while walking
+	[Export] public float StaminaIdleRegen = 10.0f;    // Points per second while stopped
+	[Export] public float AdrenalineProximityGainRate = 1.0f;
+	[Export] public float AdrenalinePassiveDecayRate = 0.2f;
 
 	public float _currentHealth { get; private set; }
 	public float _currentStamina { get; private set; }
@@ -37,14 +37,14 @@ public partial class PlayerEntity : CharacterBody2D, IDebuggable, IPausable
 	private bool _isMoving;
 
 	// Dashing
-	[Export] public float DashVelocity = 12.0f;
-	[Export] public float DashDuration = 0.25f;
+	[Export] public float DashVelocity = 30.0f;
+	[Export] public float DashDuration = 0.2f;
 	[Export] public float DashStaminaCost = 40.0f;
-	[Export] public float DashAdrenalineCost = 50.0f;
+	[Export] public float DashAdrenalineCost = 40.0f;
 
 	private Vector2 _dashDirection;
 	private float _dashTimer = 0.0f;
-	private bool _isDashing = false;
+	public bool _isDashing = false;
 
 	// Camera
 	[Export] public float CameraSmoothSpeed = 5.0f;
