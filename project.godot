@@ -13,7 +13,7 @@ config_version=5
 config/name="Project X"
 config/description="Another 2D top down shooter, kill em all"
 config/version="0.1"
-run/main_scene="uid://byd4gdw0jlh64"
+run/main_scene="uid://bewa3ugpqyhor"
 config/features=PackedStringArray("4.7", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
