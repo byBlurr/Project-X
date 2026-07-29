@@ -1,8 +1,10 @@
 using Godot;
 using System.Collections.Generic;
 
-public partial class EnemySpawner : Node2D, IDebuggable
+public partial class EnemySpawner : Node2D, IDebuggable, IPausable
 {
+    private bool _paused;
+
     [Export] public PackedScene EnemyScene;
     [Export] public float SpawnRadius = 400.0f;
     [Export] public int MaxActiveEnemies = 10;
@@ -20,6 +22,7 @@ public partial class EnemySpawner : Node2D, IDebuggable
 
     private void OnSpawnTimerTimeout()
     {
+        while (_paused) { }
         activeEnemies.RemoveAll(enemy => !GodotObject.IsInstanceValid(enemy));
         if (activeEnemies.Count >= MaxActiveEnemies) return;
         SpawnEnemy();
@@ -82,5 +85,17 @@ public partial class EnemySpawner : Node2D, IDebuggable
     {
         return $"[{Name.ToString().ToUpper()}]\n" +
                $"Active Enemies: {activeEnemies.Count} / {MaxActiveEnemies}";
+    }
+
+    public void Pause()
+    {
+        spawnTimer.Paused = true;
+        _paused = true;
+    }
+
+    public void Resume()
+    {
+        spawnTimer.Paused = false;
+        _paused = false;
     }
 }
