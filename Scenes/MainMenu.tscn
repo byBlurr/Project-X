@@ -1,6 +1,15 @@
 [gd_scene format=3 uid="uid://bewa3ugpqyhor"]
 
 [ext_resource type="Script" uid="uid://clg727u6y5b1n" path="res://Core/MainMenu.cs" id="1_tt5f1"]
+[ext_resource type="Texture2D" uid="uid://co2661byh8s5" path="res://Sprites/Placeholder/background.png" id="2_853f1"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_yeiif"]
+font_size = 13
+font_color = Color(0.40069774, 0.40069774, 0.40069768, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_vnn0b"]
+font_size = 64
+font_color = Color(0.7859496, 0.73759675, 0.5728955, 1)
 
 [node name="MainMenu" type="Control" unique_id=1349718086]
 layout_mode = 3
@@ -16,21 +25,52 @@ grow_vertical = 2
 script = ExtResource("1_tt5f1")
 _gameplayScenePath = "res://TestMap.tscn"
 
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1653822971]
+layout_mode = 0
+offset_left = -8.0
+offset_top = -125.0
+offset_right = 1150.0
+offset_bottom = 647.0
+texture = ExtResource("2_853f1")
+expand_mode = 1
+
 [node name="MainMenuButtons" type="VBoxContainer" parent="." unique_id=846724094]
 layout_mode = 0
-offset_left = 17.0
-offset_top = 154.0
-offset_right = 218.0
-offset_bottom = 443.0
+offset_left = 24.0
+offset_top = 180.0
+offset_right = 305.0
+offset_bottom = 328.0
 
 [node name="PlayButton" type="Button" parent="MainMenuButtons" unique_id=1328618327]
+custom_minimum_size = Vector2(0, 45)
 layout_mode = 2
 text = "Play"
 
 [node name="SettingsButton" type="Button" parent="MainMenuButtons" unique_id=1781574637]
+custom_minimum_size = Vector2(0, 45)
 layout_mode = 2
 text = "Settings"
 
 [node name="ExitButton" type="Button" parent="MainMenuButtons" unique_id=708998519]
+custom_minimum_size = Vector2(0, 45)
 layout_mode = 2
 text = "Exit"
+
+[node name="EarlyVersionWarningLabel" type="Label" parent="." unique_id=1709917229]
+layout_mode = 0
+offset_left = 482.0
+offset_top = 624.0
+offset_right = 1145.0
+offset_bottom = 652.0
+text = "This is an early version of the game and does not represent the final version"
+label_settings = SubResource("LabelSettings_yeiif")
+horizontal_alignment = 2
+
+[node name="GameNameLabel" type="Label" parent="." unique_id=626470195]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 48.0
+offset_right = 512.0
+offset_bottom = 136.0
+text = "Breach Protocol"
+label_settings = SubResource("LabelSettings_vnn0b")
