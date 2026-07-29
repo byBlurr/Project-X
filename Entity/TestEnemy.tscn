@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://d2ww302tgg883"]
 
 [ext_resource type="Script" uid="uid://uujwvc0umrah" path="res://Entity/EnemyEntity.cs" id="1_li1q3"]
-[ext_resource type="Texture2D" uid="uid://cgyw0tgfyacvo" path="res://icon.svg" id="1_m0i44"]
+[ext_resource type="Texture2D" uid="uid://bpoe3wlk3eqcn" path="res://Sprites/Placeholder/zombie.png" id="2_li1q3"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_yeiif"]
 radius = 64.0
@@ -12,7 +12,9 @@ collision_mask = 7
 script = ExtResource("1_li1q3")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1750655374]
-texture = ExtResource("1_m0i44")
+position = Vector2(2, -5)
+scale = Vector2(0.15, 0.15)
+texture = ExtResource("2_li1q3")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=713567988]
 shape = SubResource("CircleShape2D_yeiif")

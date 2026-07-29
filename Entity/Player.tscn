@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cud2x017wvhhu"]
 
-[ext_resource type="Texture2D" uid="uid://cgyw0tgfyacvo" path="res://icon.svg" id="1_kpjcp"]
 [ext_resource type="Script" uid="uid://d0gmuq6mqxl6t" path="res://Entity/PlayerEntity.cs" id="1_xhfnw"]
+[ext_resource type="Texture2D" uid="uid://6c60n7x7lgqa" path="res://Sprites/Placeholder/player.png" id="2_oklip"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_vnn0b"]
 animations = [{
@@ -17,7 +17,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("1_kpjcp")
+"texture": ExtResource("2_oklip")
 }],
 "loop": 1,
 "name": &"placeholder",
@@ -48,6 +48,7 @@ script = ExtResource("1_xhfnw")
 zoom = Vector2(0.5, 0.5)
 
 [node name="PlayerSprite" type="AnimatedSprite2D" parent="." unique_id=720325767]
+scale = Vector2(0.17, 0.17)
 sprite_frames = SubResource("SpriteFrames_vnn0b")
 animation = &"placeholder"
 

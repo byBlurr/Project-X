@@ -313,6 +313,7 @@ public partial class PlayerEntity : CharacterBody2D, IDebuggable
 			   $"Stamina: {CurrentStamina:F1} / {MaxStamina}\n" +
 			   $"Adrenaline: {CurrentAdrenaline:F1} / {MaxAdrenaline}\n" +
 			   $"Velocity: {MovementVelocity.Length():F2}\n" +
-			   $"Is Dashing: {isDashing} | Dash Timer: {dashTimer:F2}";
+			   $"Is Dashing: {isDashing} | Dash Timer: {dashTimer:F2}\n" +
+			   $"Zoom: {playerCamera.Zoom}";
 	}
 }
