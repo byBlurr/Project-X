@@ -11,20 +11,20 @@ public partial class EnemySpawner : Node2D, IDebuggable, IPausable
     [Export] public float ClearanceRadius = 64.0f;
     [Export] public int MaxSpawnAttempts = 10;
 
-    private List<Node2D> activeEnemies = new List<Node2D>();
-    private Timer spawnTimer;
+    private List<Node2D> _activeEnemies = new List<Node2D>();
+    private Timer _spawnTimer;
 
     public override void _Ready()
     {
-        spawnTimer = GetNode<Timer>("Timer");
-        spawnTimer.Timeout += OnSpawnTimerTimeout;
+        _spawnTimer = GetNode<Timer>("Timer");
+        _spawnTimer.Timeout += OnSpawnTimerTimeout;
     }
 
     private void OnSpawnTimerTimeout()
     {
         while (_paused) { }
-        activeEnemies.RemoveAll(enemy => !GodotObject.IsInstanceValid(enemy));
-        if (activeEnemies.Count >= MaxActiveEnemies) return;
+        _activeEnemies.RemoveAll(enemy => !GodotObject.IsInstanceValid(enemy));
+        if (_activeEnemies.Count >= MaxActiveEnemies) return;
         SpawnEnemy();
     }
 
@@ -74,7 +74,7 @@ public partial class EnemySpawner : Node2D, IDebuggable, IPausable
         Node2D enemyInstance = EnemyScene.Instantiate<Node2D>();
         enemyInstance.GlobalPosition = validSpawnPosition;
 
-        activeEnemies.Add(enemyInstance);
+        _activeEnemies.Add(enemyInstance);
         GetParent().AddChild(enemyInstance);
     }
 
@@ -84,18 +84,18 @@ public partial class EnemySpawner : Node2D, IDebuggable, IPausable
     public string GetDebugText()
     {
         return $"[{Name.ToString().ToUpper()}]\n" +
-               $"Active Enemies: {activeEnemies.Count} / {MaxActiveEnemies}";
+               $"Active Enemies: {_activeEnemies.Count} / {MaxActiveEnemies}";
     }
 
     public void Pause()
     {
-        spawnTimer.Paused = true;
+        _spawnTimer.Paused = true;
         _paused = true;
     }
 
     public void Resume()
     {
-        spawnTimer.Paused = false;
+        _spawnTimer.Paused = false;
         _paused = false;
     }
 }

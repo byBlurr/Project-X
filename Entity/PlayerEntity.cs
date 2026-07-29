@@ -6,11 +6,11 @@ public partial class PlayerEntity : CharacterBody2D, IDebuggable, IPausable
 	private bool _paused;
 	
 	// Nodes
-	private Camera2D playerCamera;
-	private AnimatedSprite2D playerSprite;
-	private CollisionShape2D playerCollision;
-	private Area2D playerRadar;
-	private CollisionShape2D playerRadarCollision;
+	private Camera2D _playerCamera;
+	private AnimatedSprite2D _playerSprite;
+	private CollisionShape2D _playerCollision;
+	private Area2D _playerRadar;
+	private CollisionShape2D _playerRadarCollision;
 
 	// Health, Stamina and Adrenaline
 	[Export] public float MaxHealth = 100.0f;
@@ -22,9 +22,9 @@ public partial class PlayerEntity : CharacterBody2D, IDebuggable, IPausable
 	[Export] public float AdrenalineProximityGainRate = 3.0f;
 	[Export] public float AdrenalinePassiveDecayRate = 1.0f;
 
-	public float CurrentHealth { get; private set; }
-	public float CurrentStamina { get; private set; }
-	public float CurrentAdrenaline { get; private set; }
+	public float _currentHealth { get; private set; }
+	public float _currentStamina { get; private set; }
+	public float _currentAdrenaline { get; private set; }
 
 	// Movement
 	[Export] public float MaximumVelocity = 2.0F;
@@ -33,8 +33,8 @@ public partial class PlayerEntity : CharacterBody2D, IDebuggable, IPausable
 	[Export] public float SprintVelocityModifier = 2.3F;
 	[Export] public float LookSens = 5.0f;
 	[Export] public float AimPenaltyModifier = 0.75f;
-	private Vector2 MovementVelocity;
-	private bool isMoving;
+	private Vector2 _movementVelocity;
+	private bool _isMoving;
 
 	// Dashing
 	[Export] public float DashVelocity = 12.0f;
@@ -42,9 +42,9 @@ public partial class PlayerEntity : CharacterBody2D, IDebuggable, IPausable
 	[Export] public float DashStaminaCost = 40.0f;
 	[Export] public float DashAdrenalineCost = 50.0f;
 
-	private Vector2 dashDirection;
-	private float dashTimer = 0.0f;
-	private bool isDashing = false;
+	private Vector2 _dashDirection;
+	private float _dashTimer = 0.0f;
+	private bool _isDashing = false;
 
 	// Camera
 	[Export] public float CameraSmoothSpeed = 5.0f;
@@ -56,31 +56,31 @@ public partial class PlayerEntity : CharacterBody2D, IDebuggable, IPausable
 	{
 		_paused = false;
 		
-		playerCamera = GetNode<Camera2D>("PlayerCamera");
-		playerSprite = GetNode<AnimatedSprite2D>("PlayerSprite");
-		playerCollision = GetNode<CollisionShape2D>("PlayerCollision");
-		playerRadar = GetNodeOrNull<Area2D>("PlayerRadar");
-		playerRadarCollision = playerRadar?.GetNodeOrNull<CollisionShape2D>("PlayerRadarCollision");
+		_playerCamera = GetNode<Camera2D>("PlayerCamera");
+		_playerSprite = GetNode<AnimatedSprite2D>("PlayerSprite");
+		_playerCollision = GetNode<CollisionShape2D>("PlayerCollision");
+		_playerRadar = GetNodeOrNull<Area2D>("PlayerRadar");
+		_playerRadarCollision = _playerRadar?.GetNodeOrNull<CollisionShape2D>("PlayerRadarCollision");
 
-		if (playerCamera == null || playerSprite == null || playerCollision == null || playerRadar == null || playerRadarCollision == null)
+		if (_playerCamera == null || _playerSprite == null || _playerCollision == null || _playerRadar == null || _playerRadarCollision == null)
 		{
 			throw new System.InvalidOperationException(
 				$"[PlayerEntity Fatal Error]: Required child nodes are missing from the scene tree!\n" +
-				$"-> PlayerCamera found: {playerCamera != null}\n" +
-				$"-> PlayerSprite found: {playerSprite != null}\n" +
-				$"-> PlayerCollision found: {playerCollision != null}\n" +
-				$"-> PlayerRadar found: {playerRadar != null}\n" +
-				$"-> PlayerRadar Shape found: {playerRadarCollision != null}\n" +
+				$"-> PlayerCamera found: {_playerCamera != null}\n" +
+				$"-> PlayerSprite found: {_playerSprite != null}\n" +
+				$"-> PlayerCollision found: {_playerCollision != null}\n" +
+				$"-> PlayerRadar found: {_playerRadar != null}\n" +
+				$"-> PlayerRadar Shape found: {_playerRadarCollision != null}\n" +
 				$"Please check that child node names match exactly in the Godot Editor scene dock."
 			);
 		}
 
-		CurrentHealth = MaxHealth;
-		CurrentStamina = MaxStamina;
-		CurrentAdrenaline = 0.0f;
+		_currentHealth = MaxHealth;
+		_currentStamina = MaxStamina;
+		_currentAdrenaline = 0.0f;
 
-		MovementVelocity = new Vector2(0, 0);
-		isMoving = false;
+		_movementVelocity = new Vector2(0, 0);
+		_isMoving = false;
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -102,64 +102,64 @@ public partial class PlayerEntity : CharacterBody2D, IDebuggable, IPausable
 
 	private void HandleInput(double delta)
 	{
-		if (playerCamera != null)
+		if (_playerCamera != null)
 		{
-			if (Input.IsActionJustPressed("zoom_out")) playerCamera.Zoom = (playerCamera.Zoom + new Vector2(-0.01F, -0.01F)).Clamp(0.0F, 1.0F);
-			if (Input.IsActionJustPressed("zoom_in")) playerCamera.Zoom = (playerCamera.Zoom + new Vector2(0.01F, 0.01F)).Clamp(0.0F, 1.0F);
+			if (Input.IsActionJustPressed("zoom_out")) _playerCamera.Zoom = (_playerCamera.Zoom + new Vector2(-0.01F, -0.01F)).Clamp(0.0F, 1.0F);
+			if (Input.IsActionJustPressed("zoom_in")) _playerCamera.Zoom = (_playerCamera.Zoom + new Vector2(0.01F, 0.01F)).Clamp(0.0F, 1.0F);
 		}
 
-		if (isDashing)
+		if (_isDashing)
 		{
-			dashTimer -= (float)delta;
-			if (dashTimer <= 0.0f)
+			_dashTimer -= (float)delta;
+			if (_dashTimer <= 0.0f)
 			{
-				isDashing = false;
+				_isDashing = false;
 			}
 			return;
 		}
 
 		if (Input.IsActionJustPressed("dash") && TrySpendDashResources())
 		{
-			isDashing = true;
-			dashTimer = DashDuration;
+			_isDashing = true;
+			_dashTimer = DashDuration;
 			
-			if (MovementVelocity != Vector2.Zero)
+			if (_movementVelocity != Vector2.Zero)
 			{
-				dashDirection = MovementVelocity.Normalized();
+				_dashDirection = _movementVelocity.Normalized();
 			}
 			else
 			{
-				dashDirection = (GetGlobalMousePosition() - GlobalPosition).Normalized();
+				_dashDirection = (GetGlobalMousePosition() - GlobalPosition).Normalized();
 			}
 
-			MovementVelocity = dashDirection * DashVelocity;
+			_movementVelocity = _dashDirection * DashVelocity;
 			return;
 		}
 
-		bool isSprinting = Input.IsActionPressed("sprint") && !Input.IsActionPressed("aim") && CurrentStamina > 0.0f;
+		bool isSprinting = Input.IsActionPressed("sprint") && !Input.IsActionPressed("aim") && _currentStamina > 0.0f;
 		float velocityChange = MaximumVelocity / Inertia;
 		if (isSprinting) velocityChange = velocityChange * SprintVelocityModifier;
 
-		isMoving = Input.IsActionPressed("move_up") || Input.IsActionPressed("move_down") || Input.IsActionPressed("move_left") || Input.IsActionPressed("move_right");
+		_isMoving = Input.IsActionPressed("move_up") || Input.IsActionPressed("move_down") || Input.IsActionPressed("move_left") || Input.IsActionPressed("move_right");
 
-		if (isSprinting) CurrentStamina = Mathf.Max(0.0f, CurrentStamina - (StaminaDrainRate * (float)delta));
-		else if (isMoving) CurrentStamina = Mathf.Min(MaxStamina, CurrentStamina + (StaminaWalkRegen * (float)delta));
-		else CurrentStamina = Mathf.Min(MaxStamina, CurrentStamina + (StaminaIdleRegen * (float)delta));
+		if (isSprinting) _currentStamina = Mathf.Max(0.0f, _currentStamina - (StaminaDrainRate * (float)delta));
+		else if (_isMoving) _currentStamina = Mathf.Min(MaxStamina, _currentStamina + (StaminaWalkRegen * (float)delta));
+		else _currentStamina = Mathf.Min(MaxStamina, _currentStamina + (StaminaIdleRegen * (float)delta));
 
-		if (isMoving)
+		if (_isMoving)
 		{
-			if (Input.IsActionPressed("move_up")) MovementVelocity += new Vector2(0, -velocityChange);
-			if (Input.IsActionPressed("move_down")) MovementVelocity += new Vector2(0, velocityChange);
-			if (Input.IsActionPressed("move_left")) MovementVelocity += new Vector2(-velocityChange, 0);
-			if (Input.IsActionPressed("move_right")) MovementVelocity += new Vector2(velocityChange, 0);
+			if (Input.IsActionPressed("move_up")) _movementVelocity += new Vector2(0, -velocityChange);
+			if (Input.IsActionPressed("move_down")) _movementVelocity += new Vector2(0, velocityChange);
+			if (Input.IsActionPressed("move_left")) _movementVelocity += new Vector2(-velocityChange, 0);
+			if (Input.IsActionPressed("move_right")) _movementVelocity += new Vector2(velocityChange, 0);
 		}
 
 		float maxCurrentSpeed = isSprinting ? MaximumVelocity * SprintVelocityModifier : MaximumVelocity;
 		maxCurrentSpeed = ApplyAimPenalty(maxCurrentSpeed);
-		MovementVelocity = MovementVelocity.LimitLength(maxCurrentSpeed);
+		_movementVelocity = _movementVelocity.LimitLength(maxCurrentSpeed);
 
-		if (!isSprinting) MovementVelocity = MovementVelocity.Clamp(-MaximumVelocity, MaximumVelocity);
-		else MovementVelocity = MovementVelocity.Clamp(-MaximumVelocity * SprintVelocityModifier, MaximumVelocity * SprintVelocityModifier);
+		if (!isSprinting) _movementVelocity = _movementVelocity.Clamp(-MaximumVelocity, MaximumVelocity);
+		else _movementVelocity = _movementVelocity.Clamp(-MaximumVelocity * SprintVelocityModifier, MaximumVelocity * SprintVelocityModifier);
 
 		if (Input.IsActionPressed("aim")) SmoothLookAtMouse(delta);
 		else LookTowardsVelocity(delta);
@@ -168,24 +168,24 @@ public partial class PlayerEntity : CharacterBody2D, IDebuggable, IPausable
 
 	public void TakeDamage(float amount)
 	{
-		CurrentHealth = Mathf.Max(0.0f, CurrentHealth - amount);
-		CurrentAdrenaline = Mathf.Min(MaxAdrenaline, CurrentAdrenaline + amount);
+		_currentHealth = Mathf.Max(0.0f, _currentHealth - amount);
+		_currentAdrenaline = Mathf.Min(MaxAdrenaline, _currentAdrenaline + amount);
 	}
 
 	public void UseDashResourceCost(float staminaCost, float adrenalineCost)
 	{
-		CurrentStamina = Mathf.Max(0.0f, CurrentStamina - staminaCost);
-		CurrentAdrenaline = Mathf.Max(0.0f, CurrentAdrenaline - adrenalineCost);
+		_currentStamina = Mathf.Max(0.0f, _currentStamina - staminaCost);
+		_currentAdrenaline = Mathf.Max(0.0f, _currentAdrenaline - adrenalineCost);
 	}
 
 	private bool TrySpendDashResources()
 	{
-		if (CurrentStamina >= DashStaminaCost)
+		if (_currentStamina >= DashStaminaCost)
 		{
 			UseDashResourceCost(DashStaminaCost, 0.0f);
 			return true;
 		}
-		else if (CurrentAdrenaline >= DashAdrenalineCost)
+		else if (_currentAdrenaline >= DashAdrenalineCost)
 		{
 			UseDashResourceCost(0.0f, DashAdrenalineCost);
 			return true;
@@ -196,9 +196,9 @@ public partial class PlayerEntity : CharacterBody2D, IDebuggable, IPausable
 
 	private void ProcessAdrenalineProximity(double delta)
 	{
-		if (playerRadar == null) return;
+		if (_playerRadar == null) return;
 
-		var overlappingBodies = playerRadar.GetOverlappingBodies();
+		var overlappingBodies = _playerRadar.GetOverlappingBodies();
 		int enemyCount = 0;
 
 		foreach (Node2D body in overlappingBodies)
@@ -214,21 +214,21 @@ public partial class PlayerEntity : CharacterBody2D, IDebuggable, IPausable
 		if (enemyCount > 0)
 		{
 			float gainAmount = AdrenalineProximityGainRate * enemyCount * (float)delta;
-			CurrentAdrenaline = Mathf.Min(MaxAdrenaline, CurrentAdrenaline + gainAmount);
+			_currentAdrenaline = Mathf.Min(MaxAdrenaline, _currentAdrenaline + gainAmount);
 		}
 		else
 		{
 			float decayAmount = AdrenalinePassiveDecayRate * (float)delta;
-			CurrentAdrenaline = Mathf.Max(0.0f, CurrentAdrenaline - decayAmount);
+			_currentAdrenaline = Mathf.Max(0.0f, _currentAdrenaline - decayAmount);
 		}
 	}
 
 	private float ApplyAimPenalty(float currentMaxSpeed)
 	{
-		if (Input.IsActionPressed("aim") && MovementVelocity != Vector2.Zero)
+		if (Input.IsActionPressed("aim") && _movementVelocity != Vector2.Zero)
 		{
 			Vector2 aimDirection = (GetGlobalMousePosition() - GlobalPosition).Normalized();
-			Vector2 movementDirection = MovementVelocity.Normalized();
+			Vector2 movementDirection = _movementVelocity.Normalized();
 			if (movementDirection.Dot(aimDirection) < 0.0f)
 			{
 				return currentMaxSpeed * AimPenaltyModifier;
@@ -247,67 +247,67 @@ public partial class PlayerEntity : CharacterBody2D, IDebuggable, IPausable
 
 	private void LookTowardsVelocity(double delta)
 	{
-		if (MovementVelocity == Vector2.Zero) return;
+		if (_movementVelocity == Vector2.Zero) return;
 
-		float targetAngle = GlobalPosition.AngleToPoint(Position + MovementVelocity);
+		float targetAngle = GlobalPosition.AngleToPoint(Position + _movementVelocity);
 		float angleDifference = Mathf.AngleDifference(Rotation, targetAngle);
 		Rotate(angleDifference * LookSens * (float)delta);
 	}
 
 	public void Move(double delta)
 	{
-		if (isDashing)
+		if (_isDashing)
 		{
-			Velocity = MovementVelocity * 60.0f;
+			Velocity = _movementVelocity * 60.0f;
 			MoveAndSlide();
-			MovementVelocity = Velocity / 60.0f;
+			_movementVelocity = Velocity / 60.0f;
 			return;
 		}
 
-		float currentResistance = isMoving ? Inertia : Deceleration;
+		float currentResistance = _isMoving ? Inertia : Deceleration;
 
-		Velocity = MovementVelocity * 60.0f;
+		Velocity = _movementVelocity * 60.0f;
 		MoveAndSlide();
-		MovementVelocity = Velocity / 60.0f;
+		_movementVelocity = Velocity / 60.0f;
 
-		Vector2 frictionChange = ((MovementVelocity / currentResistance) * 60.0f) * (float)delta;
+		Vector2 frictionChange = ((_movementVelocity / currentResistance) * 60.0f) * (float)delta;
 
-		if (Mathf.Abs(MovementVelocity.X) <= Mathf.Abs(frictionChange.X)) MovementVelocity.X = 0.0f;
-		else MovementVelocity.X -= frictionChange.X;
+		if (Mathf.Abs(_movementVelocity.X) <= Mathf.Abs(frictionChange.X)) _movementVelocity.X = 0.0f;
+		else _movementVelocity.X -= frictionChange.X;
 
-		if (Mathf.Abs(MovementVelocity.Y) <= Mathf.Abs(frictionChange.Y)) MovementVelocity.Y = 0.0f;
-		else MovementVelocity.Y -= frictionChange.Y;
+		if (Mathf.Abs(_movementVelocity.Y) <= Mathf.Abs(frictionChange.Y)) _movementVelocity.Y = 0.0f;
+		else _movementVelocity.Y -= frictionChange.Y;
 
 		// MovementVelocity += Vector2.Zero - (((MovementVelocity / currentResistance) * 60.0F) * (float)delta);
 	}
 
 	private void UpdateCamera(double delta)
 	{
-		if (playerCamera == null) return;
-		playerCamera.Position = playerCamera.Position.Lerp(Vector2.Zero, CameraSmoothSpeed * (float)delta);
+		if (_playerCamera == null) return;
+		_playerCamera.Position = _playerCamera.Position.Lerp(Vector2.Zero, CameraSmoothSpeed * (float)delta);
 	}
 
 	private void UpdateAnimations()
 	{
-		if (playerSprite == null) return;
+		if (_playerSprite == null) return;
 
 		// If using a placeholder, stop here so no walk/sprint loops trigger
 		if (UseStaticPlaceholder)
 		{
-			playerSprite.Stop(); // Freezes the animation loop
+			_playerSprite.Stop(); // Freezes the animation loop
 			return;
 		}
 
-		bool isSprinting = Input.IsActionPressed("sprint") && MovementVelocity.Length() > 0.1f;
+		bool isSprinting = Input.IsActionPressed("sprint") && _movementVelocity.Length() > 0.1f;
 
-		if (isMoving && MovementVelocity.Length() > 0.1f)
+		if (_isMoving && _movementVelocity.Length() > 0.1f)
 		{
-			if (isSprinting) playerSprite.Play("sprint");
-			else playerSprite.Play("walk");
+			if (isSprinting) _playerSprite.Play("sprint");
+			else _playerSprite.Play("walk");
 		}
 		else
 		{
-			playerSprite.Play("idle");
+			_playerSprite.Play("idle");
 		}
 	}
 
@@ -316,12 +316,12 @@ public partial class PlayerEntity : CharacterBody2D, IDebuggable, IPausable
 	public string GetDebugText()
 	{
 		return $"[PLAYERENTITY]\n" +
-			   $"Health: {CurrentHealth:F1} / {MaxHealth}\n" +
-			   $"Stamina: {CurrentStamina:F1} / {MaxStamina}\n" +
-			   $"Adrenaline: {CurrentAdrenaline:F1} / {MaxAdrenaline}\n" +
-			   $"Velocity: {MovementVelocity.Length():F2}\n" +
-			   $"Is Dashing: {isDashing} | Dash Timer: {dashTimer:F2}\n" +
-			   $"Zoom: {playerCamera.Zoom}";
+			   $"Health: {_currentHealth:F1} / {MaxHealth}\n" +
+			   $"Stamina: {_currentStamina:F1} / {MaxStamina}\n" +
+			   $"Adrenaline: {_currentAdrenaline:F1} / {MaxAdrenaline}\n" +
+			   $"Velocity: {_movementVelocity.Length():F2}\n" +
+			   $"Is Dashing: {_isDashing} | Dash Timer: {_dashTimer:F2}\n" +
+			   $"Zoom: {_playerCamera.Zoom}";
 	}
 	
 	public void Pause()
