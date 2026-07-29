@@ -12,7 +12,7 @@ public partial class GameController : Node2D
 	{
 		_isPaused = false;
         _player = GetNode<CharacterBody2D>("PlayerEntity");
-        _pauseUi = GetNode<Control>("PauseMenu");
+        _pauseUi = GetNode<CanvasLayer>("CanvasLayer").GetNode<Control>("PauseMenu");
     }
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

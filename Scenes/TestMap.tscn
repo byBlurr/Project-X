@@ -1,38 +1,38 @@
 [gd_scene format=3 uid="uid://byd4gdw0jlh64"]
 
-[ext_resource type="PackedScene" uid="uid://cud2x017wvhhu" path="res://Entity/Placeable/Player.tscn" id="1_jlwbg"]
-[ext_resource type="Script" uid="uid://c7ceoxxofjwro" path="res://Core/GameController.cs" id="1_onbnv"]
-[ext_resource type="Script" uid="uid://dn4kg7a2xyjh7" path="res://Core/DebugOverlay.cs" id="1_xxdj2"]
-[ext_resource type="PackedScene" uid="uid://c6l2ajsuq61l3" path="res://Entity/Placeable/EnemySpawner.tscn" id="3_xxdj2"]
-[ext_resource type="PackedScene" uid="uid://bjc0x3xhvtkin" path="res://Scenes/PauseMenu.tscn" id="5_lulwx"]
+[ext_resource type="Script" uid="uid://c7ceoxxofjwro" path="res://Core/GameController.cs" id="1_0314m"]
+[ext_resource type="PackedScene" uid="uid://cud2x017wvhhu" path="res://Entity/Placeable/Player.tscn" id="2_00jar"]
+[ext_resource type="PackedScene" uid="uid://c6l2ajsuq61l3" path="res://Entity/Placeable/EnemySpawner.tscn" id="3_j0g0q"]
+[ext_resource type="Script" uid="uid://dn4kg7a2xyjh7" path="res://Core/DebugOverlay.cs" id="4_e11n1"]
+[ext_resource type="PackedScene" uid="uid://bjc0x3xhvtkin" path="res://Scenes/PauseMenu.tscn" id="5_h5s6u"]
 
 [node name="TestMap" type="Node2D" unique_id=893102502]
-script = ExtResource("1_onbnv")
+script = ExtResource("1_0314m")
 
-[node name="PauseMenu" parent="." unique_id=88973353 instance=ExtResource("5_lulwx")]
-visible = false
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 576.0
-offset_top = 325.0
-offset_right = 576.0
-offset_bottom = 325.0
-
-[node name="PlayerEntity" parent="." unique_id=615078431 instance=ExtResource("1_jlwbg")]
+[node name="PlayerEntity" parent="." unique_id=615078431 instance=ExtResource("2_00jar")]
 position = Vector2(576, 325)
 
-[node name="EnemySpawner" parent="." unique_id=1233573892 instance=ExtResource("3_xxdj2")]
+[node name="EnemySpawner" parent="." unique_id=1233573892 instance=ExtResource("3_j0g0q")]
 position = Vector2(150, 518)
 MaxActiveEnemies = 5000
 
 [node name="Debug" type="Node" parent="." unique_id=747560461]
-script = ExtResource("1_xxdj2")
+script = ExtResource("4_e11n1")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="Debug" unique_id=798019279]
 
 [node name="DebugLabel" type="Label" parent="Debug/CanvasLayer" unique_id=346706226]
 offset_right = 1152.0
 offset_bottom = 649.0
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1658805976]
+
+[node name="PauseMenu" parent="CanvasLayer" unique_id=88973353 instance=ExtResource("5_h5s6u")]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_top = 1.0
+offset_bottom = 1.0
