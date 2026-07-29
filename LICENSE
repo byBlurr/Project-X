@@ -1,0 +1,118 @@
+BREACH PROTOCOL - CUSTOM LICENSE
+Version 1.0
+
+================================================================================
+PREAMBLE
+================================================================================
+
+This project, "Breach Protocol," is released under a modified GPL-3.0 license 
+with an explicit Non-Commercial clause. This license grants significant freedoms
+to fork and modify the project while preventing commercial redistribution.
+
+================================================================================
+LICENSE TERMS
+================================================================================
+
+1. PERMITTED USE (Non-Commercial)
+   
+   You are free to:
+   - View, study, and learn from the source code
+   - Fork this repository and create derivative works
+   - Modify the code for personal, educational, or research purposes
+   - Distribute modified versions, provided all conditions below are met
+   - Use this software for non-commercial purposes
+   
+   A "non-commercial purpose" means any use that does not generate direct or 
+   indirect monetary revenue, whether through sales, advertising, sponsorships, 
+   or other commercial means.
+
+2. RESTRICTIONS (Commercial Redistribution Prohibited)
+   
+   You are NOT permitted to:
+   - Release modified or derivative versions as a commercial product or service
+   - Charge any fee for the game or derivative works (directly or indirectly)
+   - Use the project in any commercial context without explicit written permission
+   - Strip, obscure, or modify these license terms in derivative works
+   - Claim ownership or copyright of the original work
+   
+   This includes but is not limited to: selling on app stores, charging for 
+   downloads, monetizing through ads in-game, or including copyrighted assets 
+   in commercial projects.
+
+3. SOURCE CODE DISCLOSURE (GPL-3.0 Compliance)
+   
+   If you distribute any derivative work publicly (commercial or non-commercial):
+   - You must provide access to the complete source code
+   - Source code must be provided under this same license (or GPL-3.0)
+   - You must clearly document all changes made to the original code
+   - Attribution to the original "Breach Protocol" project must be maintained
+
+4. COMMERCIAL USE - EXPLICIT PERMISSION REQUIRED
+   
+   If you wish to release a commercial version or derivative work, you MUST:
+   - Obtain explicit written permission from the original copyright holders
+   - Negotiate separate licensing terms (licensing fees, revenue sharing, etc.)
+   - Contact: [INSERT YOUR CONTACT EMAIL/GITHUB]
+
+5. NO WARRANTY
+   
+   This software is provided "as is" without warranty of any kind, express or 
+   implied. The authors shall not be liable for any damages arising from use, 
+   modification, or distribution of this software.
+
+6. LIABILITY LIMITATION
+   
+   In no event shall the authors be liable for any claim, damages, or other 
+   liability, whether in an action of contract, tort, or otherwise, arising 
+   from, out of, or in connection with the software or the use or dealings 
+   in the software.
+
+7. TERMINATION
+   
+   If you breach any term of this license, your rights under it automatically 
+   terminate. However, the rights of parties who have received copies or 
+   derivative works from you prior to breach shall survive.
+
+8. GOVERNING LAW
+   
+   This license is governed by the laws of [INSERT YOUR JURISDICTION].
+
+================================================================================
+COMPATIBILITY WITH GPL-3.0
+================================================================================
+
+This license incorporates the principles and restrictions of the GNU General 
+Public License v3.0 (GPL-3.0). For the full GPL-3.0 terms, see:
+https://www.gnu.org/licenses/gpl-3.0.txt
+
+The non-commercial restriction is an additional layer on top of GPL-3.0. 
+In the event of conflict, the more restrictive terms apply.
+
+================================================================================
+ATTRIBUTION REQUIREMENT
+================================================================================
+
+Any derivative works must include:
+1. A copy of this license
+2. A prominent notice of modifications made
+3. Clear attribution to "Breach Protocol" as the original project
+4. A link to the original repository
+
+Example attribution:
+"Based on Breach Protocol by [ORIGINAL AUTHORS]
+Source: https://github.com/[YOUR-GITHUB]/Project-X
+Licensed under Custom GPL-3.0 with Non-Commercial Clause"
+
+================================================================================
+THIRD-PARTY ASSETS
+================================================================================
+
+Any third-party assets included in this project (art, sound, music, libraries) 
+remain under their original licenses. Users must comply with all applicable 
+third-party licenses in addition to this license.
+
+================================================================================
+
+By using this software, you agree to all terms outlined above.
+
+Last Updated: July 2026
