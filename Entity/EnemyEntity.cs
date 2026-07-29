@@ -2,9 +2,10 @@ using Godot;
 using System;
 using System.Diagnostics;
 
-public partial class EnemyEntity : CharacterBody2D
+public partial class EnemyEntity : CharacterBody2D, IPausable
 {
 	private Node2D _player;
+	private bool _paused;
     
 	// Thresholds
 	[Export] public float ChaseThreshold { get; set; } = 750f;
@@ -21,6 +22,8 @@ public partial class EnemyEntity : CharacterBody2D
 
 	public override void _Ready()
 	{
+		_paused = false;
+		
 		_chaseThresholdSq = ChaseThreshold * ChaseThreshold;
 		_randomMoveThresholdSq = RandomMoveThreshold * RandomMoveThreshold;
 
@@ -32,10 +35,12 @@ public partial class EnemyEntity : CharacterBody2D
 
 	public override void _Process(double delta)
 	{
+		if (_paused) return;
 	}
 
 	public override void _PhysicsProcess(double delta)
 	{
+		if (_paused) return;
 		if (_player == null) return;
 		
 		float distanceSq = GlobalPosition.DistanceSquaredTo(_player.GlobalPosition);
@@ -45,7 +50,6 @@ public partial class EnemyEntity : CharacterBody2D
 		else ApproachPlayer();
 
 		LookTowardsVelocityOrPlayer(delta);
-
 	}
 
 	private void ChasePlayer(float distanceSq)
@@ -97,5 +101,16 @@ public partial class EnemyEntity : CharacterBody2D
 	private Vector2 RandomLocation()
 	{
 		return new Vector2(Position.X + _rng.RandfRange(-500, 500), Position.Y + _rng.RandfRange(-500, 500));
+	}
+	
+	// INTERFACE
+	public void Pause()
+	{
+		_paused = true;
+	}
+
+	public void Resume()
+	{
+		_paused = false;
 	}
 }

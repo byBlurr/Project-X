@@ -2,8 +2,10 @@ using System.Numerics;
 using Godot;
 using Vector2 = Godot.Vector2;
 
-public partial class PlayerEntity : CharacterBody2D, IDebuggable
+public partial class PlayerEntity : CharacterBody2D, IDebuggable, IPausable
 {
+	private bool _paused;
+	
 	// Nodes
 	private Camera2D playerCamera;
 	private AnimatedSprite2D playerSprite;
@@ -53,6 +55,8 @@ public partial class PlayerEntity : CharacterBody2D, IDebuggable
 
 	public override void _Ready()
 	{
+		_paused = false;
+		
 		playerCamera = GetNode<Camera2D>("PlayerCamera");
 		playerSprite = GetNode<AnimatedSprite2D>("PlayerSprite");
 		playerCollision = GetNode<CollisionShape2D>("PlayerCollision");
@@ -82,6 +86,8 @@ public partial class PlayerEntity : CharacterBody2D, IDebuggable
 
 	public override void _PhysicsProcess(double delta)
 	{
+		if (_paused) return;
+		
 		HandleInput(delta);
 		ProcessAdrenalineProximity(delta);
 		Move(delta);
@@ -89,6 +95,8 @@ public partial class PlayerEntity : CharacterBody2D, IDebuggable
 
 	public override void _Process(double delta)
 	{
+		if (_paused) return;
+		
 		UpdateCamera(delta);
 		UpdateAnimations();
 	}
@@ -305,7 +313,7 @@ public partial class PlayerEntity : CharacterBody2D, IDebuggable
 	}
 
 
-	// --- IDebuggable  ---
+	// --- INTERFACES  ---
 	public string GetDebugText()
 	{
 		return $"[PLAYERENTITY]\n" +
@@ -315,5 +323,15 @@ public partial class PlayerEntity : CharacterBody2D, IDebuggable
 			   $"Velocity: {MovementVelocity.Length():F2}\n" +
 			   $"Is Dashing: {isDashing} | Dash Timer: {dashTimer:F2}\n" +
 			   $"Zoom: {playerCamera.Zoom}";
+	}
+	
+	public void Pause()
+	{
+		_paused = true;
+	}
+
+	public void Resume()
+	{
+		_paused = false;
 	}
 }
