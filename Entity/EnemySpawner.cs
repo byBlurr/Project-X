@@ -5,7 +5,7 @@ public partial class EnemySpawner : Node2D, IDebuggable
 {
     [Export] public PackedScene EnemyScene;
     [Export] public float SpawnRadius = 400.0f;
-    [Export] public int MaxActiveEnemies = 5;
+    [Export] public int MaxActiveEnemies = 10;
     [Export] public float ClearanceRadius = 64.0f;
     [Export] public int MaxSpawnAttempts = 10;
 

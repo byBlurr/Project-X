@@ -7,11 +7,12 @@
 [node name="TestMap" type="Node2D" unique_id=893102502]
 script = ExtResource("1_xxdj2")
 
-[node name="PlayerEntity" parent="." unique_id=615078431 groups=["Player"] instance=ExtResource("1_jlwbg")]
+[node name="PlayerEntity" parent="." unique_id=615078431 instance=ExtResource("1_jlwbg")]
 position = Vector2(576, 325)
 
 [node name="EnemySpawner" parent="." unique_id=1233573892 instance=ExtResource("3_xxdj2")]
 position = Vector2(150, 518)
+MaxActiveEnemies = 5000
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=798019279]
 
