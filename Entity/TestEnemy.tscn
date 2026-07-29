@@ -1,13 +1,15 @@
 [gd_scene format=3 uid="uid://d2ww302tgg883"]
 
+[ext_resource type="Script" uid="uid://uujwvc0umrah" path="res://Entity/EnemyEntity.cs" id="1_li1q3"]
 [ext_resource type="Texture2D" uid="uid://cgyw0tgfyacvo" path="res://icon.svg" id="1_m0i44"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_yeiif"]
 radius = 64.0
 
-[node name="TestEnemy" type="CharacterBody2D" unique_id=185742669 groups=["enemies"]]
+[node name="TestEnemy" type="CharacterBody2D" unique_id=489135311 groups=["enemies"]]
 collision_layer = 4
-collision_mask = 4
+collision_mask = 7
+script = ExtResource("1_li1q3")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1750655374]
 texture = ExtResource("1_m0i44")

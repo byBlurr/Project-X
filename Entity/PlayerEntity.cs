@@ -1,4 +1,6 @@
+using System.Numerics;
 using Godot;
+using Vector2 = Godot.Vector2;
 
 public partial class PlayerEntity : CharacterBody2D, IDebuggable
 {
@@ -93,6 +95,12 @@ public partial class PlayerEntity : CharacterBody2D, IDebuggable
 
 	private void HandleInput(double delta)
 	{
+		if (playerCamera != null)
+		{
+			if (Input.IsActionJustPressed("zoom_out")) playerCamera.Zoom = (playerCamera.Zoom + new Vector2(-0.01F, -0.01F)).Clamp(0.0F, 1.0F);
+			if (Input.IsActionJustPressed("zoom_in")) playerCamera.Zoom = (playerCamera.Zoom + new Vector2(0.01F, 0.01F)).Clamp(0.0F, 1.0F);
+		}
+
 		if (isDashing)
 		{
 			dashTimer -= (float)delta;

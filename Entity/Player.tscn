@@ -40,12 +40,12 @@ radius = 64.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_vnn0b"]
 radius = 180.67
 
-[node name="PlayerEntity" type="CharacterBody2D" unique_id=628374450]
+[node name="PlayerEntity" type="CharacterBody2D" unique_id=628374450 groups=["Player"]]
 collision_mask = 6
-motion_mode = 1
 script = ExtResource("1_xhfnw")
 
 [node name="PlayerCamera" type="Camera2D" parent="." unique_id=1881215488]
+zoom = Vector2(0.5, 0.5)
 
 [node name="PlayerSprite" type="AnimatedSprite2D" parent="." unique_id=720325767]
 sprite_frames = SubResource("SpriteFrames_vnn0b")
