@@ -141,14 +141,10 @@ public partial class EnemyEntity : CharacterBody2D, IHurtable, IPausable
 	}
 	
 	// INTERFACES
-	public bool TakeDamage(CharacterBody2D source, float damage)
+	
+	//TODO: Inflict damage
+	public bool TakeDamage(Node2D source, float damage)
 	{
-		if (source.GetType() == typeof(PlayerEntity))
-		{
-			CurrentHealth = Math.Max(0.0F, (CurrentHealth - damage));
-			return true;
-		}
-
 		return false;
 	}
 

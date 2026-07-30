@@ -183,12 +183,6 @@ public partial class PlayerEntity : CharacterBody2D, IHurtable, IDebuggable, IPa
 
 	}
 
-	public void TakeDamage(float amount)
-	{
-		CurrentHealth = Mathf.Max(0.0f, CurrentHealth - amount);
-		CurrentAdrenaline = Mathf.Min(MaxAdrenaline, CurrentAdrenaline + amount);
-	}
-
 	public void UseDashResourceCost(float staminaCost, float adrenalineCost)
 	{
 		CurrentStamina = Mathf.Max(0.0f, CurrentStamina - staminaCost);
@@ -330,15 +324,11 @@ public partial class PlayerEntity : CharacterBody2D, IHurtable, IDebuggable, IPa
 
 
 	// --- INTERFACES  ---
-	public bool TakeDamage(CharacterBody2D source, float damage)
+	public bool TakeDamage(Node2D source, float damage)
 	{
-		if (source.GetType() == typeof(EnemyEntity))
-		{
-			CurrentHealth = Math.Max(0.0F, (CurrentHealth - damage));
-			return true;
-		}
-
-		return false;
+		CurrentHealth = Mathf.Max(0.0f, CurrentHealth - damage);
+		CurrentAdrenaline = Mathf.Min(MaxAdrenaline, CurrentAdrenaline + damage);
+		return true;
 	}
 	
 	public string GetDebugText()

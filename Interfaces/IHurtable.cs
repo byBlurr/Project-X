@@ -4,5 +4,5 @@ namespace ProjectX.Interfaces;
 
 public interface IHurtable
 {
-    public bool TakeDamage(CharacterBody2D source, float damage);
+    public bool TakeDamage(Node2D source, float damage);
 }
