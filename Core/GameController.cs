@@ -11,6 +11,8 @@ public partial class GameController : Node2D
     private ProgressBar _healthBar, _staminaBar, _armStaminaBar, _adrenalineBar;
     private TextureRect _dashStatus;
 
+    private StyleBoxFlat _healthStyle, _staminaStyle, _adrenalineStyle;
+
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
 	{
@@ -29,6 +31,16 @@ public partial class GameController : Node2D
         _staminaBar.MaxValue = _player.MaxStamina;
         _armStaminaBar.MaxValue = _player.MaxArmStamina;
         _adrenalineBar.MaxValue = _player.MaxAdrenaline;
+        
+        _healthStyle = new StyleBoxFlat();
+        _healthStyle.BgColor = new Color(0.8f, 0.2f, 0.2f, 1.0f);
+        _healthStyle.SetCornerRadiusAll(0);
+        _staminaStyle = new StyleBoxFlat();
+        _staminaStyle.BgColor = new Color(0.4f, 0.4f, 0.8f, 1.0f);
+        _staminaStyle.SetCornerRadiusAll(0);
+        _adrenalineStyle = new StyleBoxFlat();
+        _adrenalineStyle.BgColor = new Color(0.2f, 0.8f, 0.4f, 1.0f);
+        _adrenalineStyle.SetCornerRadiusAll(0);
     }
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -42,9 +54,13 @@ public partial class GameController : Node2D
         _adrenalineBar.Value = _player.CurrentAdrenaline;
         _dashStatus.Visible = _player.IsDashing;
 
+        _healthBar.AddThemeStyleboxOverride("fill", _healthStyle);
+        _staminaBar.AddThemeStyleboxOverride("fill", _staminaStyle);
         StyleBoxFlat armStyle = new StyleBoxFlat();
+        armStyle.SetCornerRadiusAll(0);
         armStyle.BgColor = _player.CurrentArmStamina < _player.ArmStaminaShakePoint ? new Color(1.0f, 0.0f, 0.0f, 1.0f) : new Color(0.3f, 0.3f, 1.0f, 1.0f);
         _armStaminaBar.AddThemeStyleboxOverride("fill", armStyle);
+        _adrenalineBar.AddThemeStyleboxOverride("fill", _adrenalineStyle);
     }
 
 	private void PauseGame()
