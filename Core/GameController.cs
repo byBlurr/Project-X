@@ -8,7 +8,7 @@ public partial class GameController : Node2D
 	private CanvasLayer _canvas;
 
     private Control _pauseUi;
-    private ProgressBar _healthBar, _staminaBar, _adrenalineBar;
+    private ProgressBar _healthBar, _staminaBar, _armStaminaBar, _adrenalineBar;
     private TextureRect _dashStatus;
 
     // Called when the node enters the scene tree for the first time.
@@ -21,11 +21,13 @@ public partial class GameController : Node2D
         _pauseUi = _canvas.GetNode<Control>("PauseMenu");
         _healthBar = _canvas.GetNode<VBoxContainer>("StatBars").GetNode<ProgressBar>("HealthBar");
         _staminaBar = _canvas.GetNode<VBoxContainer>("StatBars").GetNode<ProgressBar>("StaminaBar");
+        _armStaminaBar = _canvas.GetNode<VBoxContainer>("StatBars").GetNode<ProgressBar>("ArmStaminaBar");
         _adrenalineBar = _canvas.GetNode<VBoxContainer>("StatBars").GetNode<ProgressBar>("AdrenalineBar");
         _dashStatus = _canvas.GetNode<TextureRect>("DashStatus");
 
         _healthBar.MaxValue = _player.MaxHealth;
         _staminaBar.MaxValue = _player.MaxStamina;
+        _armStaminaBar.MaxValue = _player.MaxArmStamina;
         _adrenalineBar.MaxValue = _player.MaxAdrenaline;
     }
 
@@ -34,10 +36,15 @@ public partial class GameController : Node2D
 	{
 		if (Input.IsActionJustPressed("pause")) PauseGame();
 
-        _healthBar.Value = _player._currentHealth;
-        _staminaBar.Value = _player._currentStamina;
-        _adrenalineBar.Value = _player._currentAdrenaline;
-        _dashStatus.Visible = _player._isDashing;
+        _healthBar.Value = _player.CurrentHealth;
+        _staminaBar.Value = _player.CurrentStamina;
+        _armStaminaBar.Value = _player.CurrentArmStamina;
+        _adrenalineBar.Value = _player.CurrentAdrenaline;
+        _dashStatus.Visible = _player.IsDashing;
+
+        StyleBoxFlat armStyle = new StyleBoxFlat();
+        armStyle.BgColor = _player.CurrentArmStamina < _player.ArmStaminaShakePoint ? new Color(1.0f, 0.0f, 0.0f, 1.0f) : new Color(0.3f, 0.3f, 1.0f, 1.0f);
+        _armStaminaBar.AddThemeStyleboxOverride("fill", armStyle);
     }
 
 	private void PauseGame()

@@ -13,18 +13,23 @@ public partial class PlayerEntity : CharacterBody2D, IDebuggable, IPausable
 	private CollisionShape2D _playerRadarCollision;
 
 	// Health, Stamina and Adrenaline
-	[Export] public float MaxHealth = 100.0f;
-	[Export] public float MaxStamina = 100.0f;
-	[Export] public float MaxAdrenaline = 60.0f;
-	[Export] public float StaminaDrainRate = 1.1f;      // Points per second while sprinting
-	[Export] public float StaminaWalkRegen = 5.0f;    // Points per second while walking
-	[Export] public float StaminaIdleRegen = 10.0f;    // Points per second while stopped
+	[Export] public float MaxHealth = 100.0F;
+	[Export] public float MaxStamina = 100.0F;
+	[Export] public float MaxArmStamina = 100.0F;
+	[Export] public float MaxAdrenaline = 60.0F;
+	[Export] public float StaminaDrainRate = 1.1F;
+	[Export] public float StaminaWalkRegen = 5.0F;
+	[Export] public float StaminaIdleRegen = 10.0F;
+	[Export] public float ArmStaminaDrainRate = 2.5F;
+	[Export] public float ArmStaminaRegen = 7.5F;
+	[Export] public float ArmStaminaShakePoint = 20.0F; // Percentage of arm stamina when aim becomes too inaccurate
 	[Export] public float AdrenalineProximityGainRate = 1.0f;
 	[Export] public float AdrenalinePassiveDecayRate = 0.2f;
 
-	public float _currentHealth { get; private set; }
-	public float _currentStamina { get; private set; }
-	public float _currentAdrenaline { get; private set; }
+	public float CurrentHealth { get; private set; }
+	public float CurrentStamina { get; private set; }
+	public float CurrentArmStamina { get; private set; }
+	public float CurrentAdrenaline { get; private set; }
 
 	// Movement
 	[Export] public float MaximumVelocity = 2.0F;
@@ -44,7 +49,10 @@ public partial class PlayerEntity : CharacterBody2D, IDebuggable, IPausable
 
 	private Vector2 _dashDirection;
 	private float _dashTimer = 0.0f;
-	public bool _isDashing = false;
+	public bool IsDashing = false;
+	
+	// Combat
+	private bool _isAiming;
 
 	// Camera
 	[Export] public float CameraSmoothSpeed = 5.0f;
@@ -75,12 +83,14 @@ public partial class PlayerEntity : CharacterBody2D, IDebuggable, IPausable
 			);
 		}
 
-		_currentHealth = MaxHealth;
-		_currentStamina = MaxStamina;
-		_currentAdrenaline = 0.0f;
+		CurrentHealth = MaxHealth;
+		CurrentStamina = MaxStamina;
+		CurrentArmStamina = MaxArmStamina;
+		CurrentAdrenaline = 0.0f;
 
 		_movementVelocity = new Vector2(0, 0);
 		_isMoving = false;
+		_isAiming = false;
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -108,19 +118,19 @@ public partial class PlayerEntity : CharacterBody2D, IDebuggable, IPausable
 			if (Input.IsActionJustPressed("zoom_in")) _playerCamera.Zoom = (_playerCamera.Zoom + new Vector2(0.01F, 0.01F)).Clamp(0.0F, 1.0F);
 		}
 
-		if (_isDashing)
+		if (IsDashing)
 		{
 			_dashTimer -= (float)delta;
 			if (_dashTimer <= 0.0f)
 			{
-				_isDashing = false;
+				IsDashing = false;
 			}
 			return;
 		}
 
 		if (Input.IsActionJustPressed("dash") && TrySpendDashResources())
 		{
-			_isDashing = true;
+			IsDashing = true;
 			_dashTimer = DashDuration;
 			
 			if (_movementVelocity != Vector2.Zero)
@@ -136,15 +146,19 @@ public partial class PlayerEntity : CharacterBody2D, IDebuggable, IPausable
 			return;
 		}
 
-		bool isSprinting = Input.IsActionPressed("sprint") && !Input.IsActionPressed("aim") && _currentStamina > 0.0f;
+		_isAiming = Input.IsActionPressed("aim");
+		if (_isAiming) CurrentArmStamina = Mathf.Max(0.0f, CurrentArmStamina - (ArmStaminaDrainRate * (float)delta));
+		else CurrentArmStamina = Mathf.Min(MaxArmStamina, CurrentArmStamina + (ArmStaminaRegen * (float)delta));
+		
+		bool isSprinting = Input.IsActionPressed("sprint") && !_isAiming && CurrentStamina > 0.0f;
 		float velocityChange = MaximumVelocity / Inertia;
 		if (isSprinting) velocityChange = velocityChange * SprintVelocityModifier;
 
 		_isMoving = Input.IsActionPressed("move_up") || Input.IsActionPressed("move_down") || Input.IsActionPressed("move_left") || Input.IsActionPressed("move_right");
 
-		if (isSprinting) _currentStamina = Mathf.Max(0.0f, _currentStamina - (StaminaDrainRate * (float)delta));
-		else if (_isMoving) _currentStamina = Mathf.Min(MaxStamina, _currentStamina + (StaminaWalkRegen * (float)delta));
-		else _currentStamina = Mathf.Min(MaxStamina, _currentStamina + (StaminaIdleRegen * (float)delta));
+		if (isSprinting) CurrentStamina = Mathf.Max(0.0f, CurrentStamina - (StaminaDrainRate * (float)delta));
+		else if (_isMoving) CurrentStamina = Mathf.Min(MaxStamina, CurrentStamina + (StaminaWalkRegen * (float)delta));
+		else CurrentStamina = Mathf.Min(MaxStamina, CurrentStamina + (StaminaIdleRegen * (float)delta));
 
 		if (_isMoving)
 		{
@@ -161,31 +175,31 @@ public partial class PlayerEntity : CharacterBody2D, IDebuggable, IPausable
 		if (!isSprinting) _movementVelocity = _movementVelocity.Clamp(-MaximumVelocity, MaximumVelocity);
 		else _movementVelocity = _movementVelocity.Clamp(-MaximumVelocity * SprintVelocityModifier, MaximumVelocity * SprintVelocityModifier);
 
-		if (Input.IsActionPressed("aim")) SmoothLookAtMouse(delta);
+		if (_isAiming) SmoothLookAtMouse(delta);
 		else LookTowardsVelocity(delta);
 
 	}
 
 	public void TakeDamage(float amount)
 	{
-		_currentHealth = Mathf.Max(0.0f, _currentHealth - amount);
-		_currentAdrenaline = Mathf.Min(MaxAdrenaline, _currentAdrenaline + amount);
+		CurrentHealth = Mathf.Max(0.0f, CurrentHealth - amount);
+		CurrentAdrenaline = Mathf.Min(MaxAdrenaline, CurrentAdrenaline + amount);
 	}
 
 	public void UseDashResourceCost(float staminaCost, float adrenalineCost)
 	{
-		_currentStamina = Mathf.Max(0.0f, _currentStamina - staminaCost);
-		_currentAdrenaline = Mathf.Max(0.0f, _currentAdrenaline - adrenalineCost);
+		CurrentStamina = Mathf.Max(0.0f, CurrentStamina - staminaCost);
+		CurrentAdrenaline = Mathf.Max(0.0f, CurrentAdrenaline - adrenalineCost);
 	}
 
 	private bool TrySpendDashResources()
 	{
-		if (_currentStamina >= DashStaminaCost)
+		if (CurrentStamina >= DashStaminaCost)
 		{
 			UseDashResourceCost(DashStaminaCost, 0.0f);
 			return true;
 		}
-		else if (_currentAdrenaline >= DashAdrenalineCost)
+		else if (CurrentAdrenaline >= DashAdrenalineCost)
 		{
 			UseDashResourceCost(0.0f, DashAdrenalineCost);
 			return true;
@@ -214,18 +228,18 @@ public partial class PlayerEntity : CharacterBody2D, IDebuggable, IPausable
 		if (enemyCount > 0)
 		{
 			float gainAmount = AdrenalineProximityGainRate * enemyCount * (float)delta;
-			_currentAdrenaline = Mathf.Min(MaxAdrenaline, _currentAdrenaline + gainAmount);
+			CurrentAdrenaline = Mathf.Min(MaxAdrenaline, CurrentAdrenaline + gainAmount);
 		}
 		else
 		{
 			float decayAmount = AdrenalinePassiveDecayRate * (float)delta;
-			_currentAdrenaline = Mathf.Max(0.0f, _currentAdrenaline - decayAmount);
+			CurrentAdrenaline = Mathf.Max(0.0f, CurrentAdrenaline - decayAmount);
 		}
 	}
 
 	private float ApplyAimPenalty(float currentMaxSpeed)
 	{
-		if (Input.IsActionPressed("aim") && _movementVelocity != Vector2.Zero)
+		if (_isAiming && _movementVelocity != Vector2.Zero)
 		{
 			Vector2 aimDirection = (GetGlobalMousePosition() - GlobalPosition).Normalized();
 			Vector2 movementDirection = _movementVelocity.Normalized();
@@ -256,7 +270,7 @@ public partial class PlayerEntity : CharacterBody2D, IDebuggable, IPausable
 
 	public void Move(double delta)
 	{
-		if (_isDashing)
+		if (IsDashing)
 		{
 			Velocity = _movementVelocity * 60.0f;
 			MoveAndSlide();
@@ -316,11 +330,11 @@ public partial class PlayerEntity : CharacterBody2D, IDebuggable, IPausable
 	public string GetDebugText()
 	{
 		return $"[PLAYERENTITY]\n" +
-			   $"Health: {_currentHealth:F1} / {MaxHealth}\n" +
-			   $"Stamina: {_currentStamina:F1} / {MaxStamina}\n" +
-			   $"Adrenaline: {_currentAdrenaline:F1} / {MaxAdrenaline}\n" +
+			   $"Health: {CurrentHealth:F1} / {MaxHealth}\n" +
+			   $"Stamina: {CurrentStamina:F1} / {MaxStamina}\n" +
+			   $"Adrenaline: {CurrentAdrenaline:F1} / {MaxAdrenaline}\n" +
 			   $"Velocity: {_movementVelocity.Length():F2}\n" +
-			   $"Is Dashing: {_isDashing} | Dash Timer: {_dashTimer:F2}\n" +
+			   $"Is Dashing: {IsDashing} | Dash Timer: {_dashTimer:F2}\n" +
 			   $"Zoom: {_playerCamera.Zoom}";
 	}
 	
