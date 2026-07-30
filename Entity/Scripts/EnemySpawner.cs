@@ -1,27 +1,30 @@
 using Godot;
 using System.Collections.Generic;
 
-public partial class EnemySpawner : Node2D, IDebuggable
+public partial class EnemySpawner : Node2D, IDebuggable, IPausable
 {
+    private bool _paused;
+
     [Export] public PackedScene EnemyScene;
     [Export] public float SpawnRadius = 400.0f;
     [Export] public int MaxActiveEnemies = 10;
     [Export] public float ClearanceRadius = 64.0f;
     [Export] public int MaxSpawnAttempts = 10;
 
-    private List<Node2D> activeEnemies = new List<Node2D>();
-    private Timer spawnTimer;
+    private List<Node2D> _activeEnemies = new List<Node2D>();
+    private Timer _spawnTimer;
 
     public override void _Ready()
     {
-        spawnTimer = GetNode<Timer>("Timer");
-        spawnTimer.Timeout += OnSpawnTimerTimeout;
+        _spawnTimer = GetNode<Timer>("Timer");
+        _spawnTimer.Timeout += OnSpawnTimerTimeout;
     }
 
     private void OnSpawnTimerTimeout()
     {
-        activeEnemies.RemoveAll(enemy => !GodotObject.IsInstanceValid(enemy));
-        if (activeEnemies.Count >= MaxActiveEnemies) return;
+        while (_paused) { }
+        _activeEnemies.RemoveAll(enemy => !GodotObject.IsInstanceValid(enemy));
+        if (_activeEnemies.Count >= MaxActiveEnemies) return;
         SpawnEnemy();
     }
 
@@ -71,7 +74,7 @@ public partial class EnemySpawner : Node2D, IDebuggable
         Node2D enemyInstance = EnemyScene.Instantiate<Node2D>();
         enemyInstance.GlobalPosition = validSpawnPosition;
 
-        activeEnemies.Add(enemyInstance);
+        _activeEnemies.Add(enemyInstance);
         GetParent().AddChild(enemyInstance);
     }
 
@@ -81,6 +84,18 @@ public partial class EnemySpawner : Node2D, IDebuggable
     public string GetDebugText()
     {
         return $"[{Name.ToString().ToUpper()}]\n" +
-               $"Active Enemies: {activeEnemies.Count} / {MaxActiveEnemies}";
+               $"Active Enemies: {_activeEnemies.Count} / {MaxActiveEnemies}";
+    }
+
+    public void Pause()
+    {
+        _spawnTimer.Paused = true;
+        _paused = true;
+    }
+
+    public void Resume()
+    {
+        _spawnTimer.Paused = false;
+        _paused = false;
     }
 }

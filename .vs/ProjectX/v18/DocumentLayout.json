@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "E:\\Godot\\Projects\\project-x\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{FEC40992-AD09-4112-A264-87FD2D35752D}|ProjectX.csproj|e:\\godot\\projects\\project-x\\entity\\enemyentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FEC40992-AD09-4112-A264-87FD2D35752D}|ProjectX.csproj|solutionrelative:entity\\enemyentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{FEC40992-AD09-4112-A264-87FD2D35752D}|ProjectX.csproj|e:\\godot\\projects\\project-x\\entity\\playerentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{FEC40992-AD09-4112-A264-87FD2D35752D}|ProjectX.csproj|solutionrelative:entity\\playerentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
@@ -14,19 +18,32 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "PlayerEntity.cs",
               "DocumentMoniker": "E:\\Godot\\Projects\\project-x\\Entity\\PlayerEntity.cs",
               "RelativeDocumentMoniker": "Entity\\PlayerEntity.cs",
               "ToolTip": "E:\\Godot\\Projects\\project-x\\Entity\\PlayerEntity.cs",
               "RelativeToolTip": "Entity\\PlayerEntity.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAIEAAAAAAAAAAAAmwKAAAABhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-28T17:44:10.734Z",
+              "WhenOpened": "2026-07-29T16:26:37.825Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "EnemyEntity.cs",
+              "DocumentMoniker": "E:\\Godot\\Projects\\project-x\\Entity\\EnemyEntity.cs",
+              "RelativeDocumentMoniker": "Entity\\EnemyEntity.cs",
+              "ToolTip": "E:\\Godot\\Projects\\project-x\\Entity\\EnemyEntity.cs",
+              "RelativeToolTip": "Entity\\EnemyEntity.cs",
+              "ViewState": "AgIAAFYAAAAAAAAAAAAuwHsAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-29T16:26:34.155Z",
               "EditorCaption": ""
             }
           ]

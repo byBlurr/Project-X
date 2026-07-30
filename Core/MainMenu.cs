@@ -3,6 +3,7 @@ using Godot;
 public partial class MainMenu : Control
 {
     [Export] private string _gameplayScenePath = "res://Game.tscn";
+    
 
     public override void _Ready()
     {
