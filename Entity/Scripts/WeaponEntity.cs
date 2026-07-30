@@ -15,12 +15,13 @@ public partial class WeaponEntity : Node2D
 	{
 	}
 
-	public void Shoot(Vector2 direction)
+	public void Shoot()
 	{
 		CharacterBody2D owner = Owner as CharacterBody2D;
-		Node2D projectile = Projectile.Instantiate<Node2D>();
+		ProjectileEntity projectile = Projectile.Instantiate<ProjectileEntity>();
 		projectile.GlobalPosition = GlobalPosition;
 		projectile.GlobalRotation = GlobalRotation;
+		projectile.ProjectileOwner = owner;
 		GetTree().Root.AddChild(projectile);
 	}
 }

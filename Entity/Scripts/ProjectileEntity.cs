@@ -1,20 +1,24 @@
 using Godot;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using ProjectX.Interfaces;
 
 public partial class ProjectileEntity : Node2D
 {
-	[Export] public float MaxVelocity = 1000.0F;
-	[Export] public float MinVelocity = 50.0F;
+	[Export] public float MaxVelocity = 5000.0F;
+	[Export] public float MinVelocity = 100.0F;
 	[Export] public float Deceleration = 350.0F;
 	[Export] public float Damage = 25.0F;
 	[Export] public float Penetration = 10.0F;
 	[Export] public bool Explosive = false;
 	[Export] public float Lifetime = 10.0f;
-	private CharacterBody2D _owner;
+	[Export] public RayCast2D CollisionRaycast; 
+	public CharacterBody2D ProjectileOwner;
 	private Vector2 _direction;
 	private float _currentVelocity;
 	private float _timeAlive = 0.0f;
+	private readonly HashSet<GodotObject> _hitTargets = new HashSet<GodotObject>();
 	
 	// Draw a bullet
 	[Export] public float CircleRadius = 3f;
@@ -29,10 +33,11 @@ public partial class ProjectileEntity : Node2D
 	public override void _PhysicsProcess(double delta)
 	{
 		Cleanup(delta);
+		CheckCollision(delta);
 		
-		if (_owner == null) return; // TODO Don't do anything until the owner is known, this has to be manually setup when spawning the projectile
-		_currentVelocity = _currentVelocity - (Deceleration * (float)delta);
+		if (ProjectileOwner == null) return; // TODO Don't do anything until the owner is known, this has to be manually setup when spawning the projectile
 		Position += (_direction * _currentVelocity) * (float)delta;
+		_currentVelocity = _currentVelocity - (Deceleration * (float)delta);
 	}
 	
 	public override void _Draw()
@@ -40,13 +45,30 @@ public partial class ProjectileEntity : Node2D
 		DrawCircle(Vector2.Zero, CircleRadius, CircleColor);
 	}
 
+	private void CheckCollision(double delta)
+	{
+		CollisionRaycast.TargetPosition = new Vector2(_currentVelocity * (float)delta, 0.0F);
+		CollisionRaycast.ForceRaycastUpdate();
+
+		if (CollisionRaycast.IsColliding())
+		{
+			GodotObject collider = CollisionRaycast.GetCollider();
+			if (_hitTargets.Contains(collider)) return;
+			if (collider is IHurtable hurtBody)
+			{
+				Penetrate(collider as CharacterBody2D);
+			}
+		}
+	}
+
 	// TODO: Check what entity it has hit, use IHurtable to cause damage and then slow the bullet or destroy if velocity too low
 	public void Penetrate(CharacterBody2D body)
 	{
-		if (_owner == body) return; // Will this stop self harm? TODO Test
+		if (ProjectileOwner == body) return; // Will this stop self harm? TODO Test
+		_hitTargets.Add(body);
 		if (body is IHurtable hurtBody)
 		{
-			float speedPercentage = (_currentVelocity / MaxVelocity) * 100f;
+			float speedPercentage = (_currentVelocity / MaxVelocity);
 			float damage = Damage * speedPercentage;
 			
 			hurtBody.TakeDamage(this, damage);

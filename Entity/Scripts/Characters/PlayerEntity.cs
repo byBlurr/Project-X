@@ -14,6 +14,7 @@ public partial class PlayerEntity : CharacterBody2D, IHurtable, IDebuggable, IPa
 	private CollisionShape2D _playerCollision;
 	private Area2D _playerRadar;
 	private CollisionShape2D _playerRadarCollision;
+	private WeaponEntity _playerWeapon;
 
 	// Health, Stamina and Adrenaline
 	[Export] public float MaxHealth = 100.0F;
@@ -72,16 +73,18 @@ public partial class PlayerEntity : CharacterBody2D, IHurtable, IDebuggable, IPa
 		_playerCollision = GetNode<CollisionShape2D>("PlayerCollision");
 		_playerRadar = GetNodeOrNull<Area2D>("PlayerRadar");
 		_playerRadarCollision = _playerRadar?.GetNodeOrNull<CollisionShape2D>("PlayerRadarCollision");
-
+		_playerWeapon = GetNode<WeaponEntity>("Weapon");
+		
 		if (_playerCamera == null || _playerSprite == null || _playerCollision == null || _playerRadar == null || _playerRadarCollision == null)
 		{
 			throw new System.InvalidOperationException(
-				$"[PlayerEntity Fatal Error]: Required child nodes are missing from the scene tree!\n" +
+				$"[PlayerEntity Fatal Error]: Required child nodes are missing or incorrectly named from the scene tree!\n" +
 				$"-> PlayerCamera found: {_playerCamera != null}\n" +
 				$"-> PlayerSprite found: {_playerSprite != null}\n" +
 				$"-> PlayerCollision found: {_playerCollision != null}\n" +
 				$"-> PlayerRadar found: {_playerRadar != null}\n" +
 				$"-> PlayerRadar Shape found: {_playerRadarCollision != null}\n" +
+				$"-> PlayerWeapon found: {_playerWeapon != null}\n" +
 				$"Please check that child node names match exactly in the Godot Editor scene dock."
 			);
 		}
@@ -178,6 +181,8 @@ public partial class PlayerEntity : CharacterBody2D, IHurtable, IDebuggable, IPa
 		if (!isSprinting) _movementVelocity = _movementVelocity.Clamp(-MaxVelocity, MaxVelocity);
 		else _movementVelocity = _movementVelocity.Clamp(-MaxVelocity * SprintVelocityModifier, MaxVelocity * SprintVelocityModifier);
 
+		if (Input.IsActionJustPressed("shoot"))_playerWeapon.Shoot();
+		
 		if (_isAiming) SmoothLookAtMouse(delta);
 		else LookTowardsVelocity(delta);
 

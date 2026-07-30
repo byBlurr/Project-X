@@ -50,6 +50,7 @@ public partial class EnemyEntity : CharacterBody2D, IHurtable, IPausable
 	{
 		if (_paused) return;
         if (_player == null) return;
+        if (CurrentHealth <= 0) QueueFree();
     }
 
 	public override void _PhysicsProcess(double delta)
@@ -145,7 +146,8 @@ public partial class EnemyEntity : CharacterBody2D, IHurtable, IPausable
 	//TODO: Inflict damage
 	public bool TakeDamage(Node2D source, float damage)
 	{
-		return false;
+		CurrentHealth = Math.Max(0.0F, CurrentHealth - damage);
+		return true;
 	}
 
 	public void Pause()

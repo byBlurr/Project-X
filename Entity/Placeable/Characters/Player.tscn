@@ -1,7 +1,8 @@
 [gd_scene format=3 uid="uid://cud2x017wvhhu"]
 
-[ext_resource type="Script" uid="uid://d0gmuq6mqxl6t" path="res://Entity/Scripts/Characters/PlayerEntity.cs" id="1_xhfnw"]
+[ext_resource type="Script" uid="uid://d0gmuq6mqxl6t" path="res://Entity/Scripts/Characters/PlayerEntity.cs" id="1_3g6f1"]
 [ext_resource type="Texture2D" uid="uid://6c60n7x7lgqa" path="res://Sprites/Placeholder/player.png" id="2_oklip"]
+[ext_resource type="PackedScene" uid="uid://dfccufteydl4h" path="res://Entity/Placeable/TestWeapon.tscn" id="3_fnd2n"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_vnn0b"]
 animations = [{
@@ -42,7 +43,7 @@ radius = 220.0
 
 [node name="PlayerEntity" type="CharacterBody2D" unique_id=628374450 groups=["Player"]]
 collision_mask = 6
-script = ExtResource("1_xhfnw")
+script = ExtResource("1_3g6f1")
 
 [node name="PlayerCamera" type="Camera2D" parent="." unique_id=1881215488]
 zoom = Vector2(0.5, 0.5)
@@ -62,3 +63,5 @@ collision_mask = 4
 [node name="PlayerRadarCollision" type="CollisionShape2D" parent="PlayerRadar" unique_id=612207688]
 shape = SubResource("CircleShape2D_vnn0b")
 debug_color = Color(0.98765844, 0, 0.31565955, 0.41960785)
+
+[node name="Weapon" parent="." unique_id=933184935 instance=ExtResource("3_fnd2n")]

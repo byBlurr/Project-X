@@ -2,5 +2,10 @@
 
 [ext_resource type="Script" uid="uid://cykuq5te5rhw5" path="res://Entity/Scripts/ProjectileEntity.cs" id="1_sdw1l"]
 
-[node name="TestProjectile" type="Node2D" unique_id=2010961809]
+[node name="TestProjectile" type="Node2D" unique_id=2010961809 node_paths=PackedStringArray("CollisionRaycast")]
 script = ExtResource("1_sdw1l")
+CollisionRaycast = NodePath("RayCast2D")
+
+[node name="RayCast2D" type="RayCast2D" parent="." unique_id=307985511]
+visible = false
+collision_mask = 4
