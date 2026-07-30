@@ -1,0 +1,4 @@
+﻿- Add a sprite to weapons
+- Add a held weapon to PlayerEntity (for now this will be a fixed weapon)
+- Add some randomness to the direction of the held weapon per tick based on aim and arm stamina (this should already affect where bullets go once implemented as bullets follow the same direction as the weapon they're fired from, maybe make the bullets super slow to test)
+- Manage bullet impacts with entities

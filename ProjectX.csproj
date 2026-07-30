@@ -4,4 +4,9 @@
     <TargetFramework Condition=" '$(GodotTargetPlatform)' == 'android' ">net9.0</TargetFramework>
     <EnableDynamicLoading>true</EnableDynamicLoading>
   </PropertyGroup>
+  <ItemGroup>
+    <Content Include="Documents\Ideas.txt" />
+    <Content Include="Documents\ThingsToRemember.txt" />
+    <Content Include="Documents\Todo List.txt" />
+  </ItemGroup>
 </Project>
