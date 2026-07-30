@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://d2ww302tgg883"]
 
-[ext_resource type="Script" uid="uid://uujwvc0umrah" path="res://Entity/Scripts/EnemyEntity.cs" id="1_li1q3"]
-[ext_resource type="Texture2D" uid="uid://bpoe3wlk3eqcn" path="res://Sprites/Placeholder/zombie.png" id="2_li1q3"]
+[ext_resource type="Script" uid="uid://uujwvc0umrah" path="res://Entity/Scripts/Characters/EnemyEntity.cs" id="1_urt1i"]
+[ext_resource type="Texture2D" uid="uid://bpoe3wlk3eqcn" path="res://Sprites/Placeholder/zombie.png" id="2_wk0jb"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_yeiif"]
 radius = 64.0
@@ -9,12 +9,12 @@ radius = 64.0
 [node name="TestEnemy" type="CharacterBody2D" unique_id=489135311 groups=["enemies"]]
 collision_layer = 4
 collision_mask = 7
-script = ExtResource("1_li1q3")
+script = ExtResource("1_urt1i")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1750655374]
 position = Vector2(2, -5)
 scale = Vector2(0.15, 0.15)
-texture = ExtResource("2_li1q3")
+texture = ExtResource("2_wk0jb")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=713567988]
 shape = SubResource("CircleShape2D_yeiif")
