@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://c6l2ajsuq61l3"]
 
 [ext_resource type="Script" uid="uid://cv6etr8m6d82" path="res://Entity/Scripts/EnemySpawner.cs" id="1_1v45m"]
-[ext_resource type="PackedScene" uid="uid://d2ww302tgg883" path="res://Entity/Placeable/TestEnemy.tscn" id="2_vpdg2"]
+[ext_resource type="PackedScene" uid="uid://d2ww302tgg883" path="res://Entity/Placeable/Characters/TestEnemy.tscn" id="2_bohmg"]
 
 [node name="EnemySpawner" type="Node2D" unique_id=1233573892]
 script = ExtResource("1_1v45m")
-EnemyScene = ExtResource("2_vpdg2")
+EnemyScene = ExtResource("2_bohmg")
 
 [node name="Timer" type="Timer" parent="." unique_id=1645150311]
 autostart = true

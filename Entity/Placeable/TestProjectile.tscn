@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://437cutrm2258"]
+
+[ext_resource type="Script" uid="uid://cykuq5te5rhw5" path="res://Entity/Scripts/ProjectileEntity.cs" id="1_sdw1l"]
+
+[node name="TestProjectile" type="Node2D" unique_id=2010961809]
+script = ExtResource("1_sdw1l")

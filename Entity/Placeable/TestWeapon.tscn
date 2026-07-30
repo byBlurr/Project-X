@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://dfccufteydl4h"]
+
+[ext_resource type="Script" uid="uid://bgttfec8s43k2" path="res://Entity/Scripts/WeaponEntity.cs" id="1_4g10g"]
+[ext_resource type="PackedScene" uid="uid://437cutrm2258" path="res://Entity/Placeable/TestProjectile.tscn" id="2_dkr3r"]
+
+[node name="TestWeapon" type="Node2D" unique_id=933184935]
+script = ExtResource("1_4g10g")
+Projectile = ExtResource("2_dkr3r")
