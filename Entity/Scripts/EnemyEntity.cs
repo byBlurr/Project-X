@@ -1,8 +1,10 @@
+using System.Diagnostics;
 using Godot;
+using ProjectX.Interfaces;
 
-public partial class EnemyEntity : CharacterBody2D, IPausable
+public partial class EnemyEntity : CharacterBody2D, IHurtable, IPausable
 {
-	private Node2D _player;
+	private PlayerEntity _player;
 	private bool _paused;
     
 	// Thresholds
@@ -12,7 +14,7 @@ public partial class EnemyEntity : CharacterBody2D, IPausable
 	private float _randomMoveThresholdSq;
 
     // Movement
-    [Export] public float MaximumVelocity = 3.0F;
+    [Export] public float MaxVelocity = 3.0F;
     [Export] public float Inertia = 25.0F;
     [Export] public float Deceleration = 10.0F;
     [Export] public float LookSens = 4.0f;
@@ -20,6 +22,10 @@ public partial class EnemyEntity : CharacterBody2D, IPausable
     private bool _isMoving;
     private bool _isChasing;
 	private Vector2 _targetLocation;
+	
+	// Health
+	[Export] public float MaxHealth = 100f;
+	public float CurrentHealth;
 
 	public override void _Ready()
 	{
@@ -28,14 +34,16 @@ public partial class EnemyEntity : CharacterBody2D, IPausable
 		_chaseThresholdSq = ChaseThreshold * ChaseThreshold;
 		_randomMoveThresholdSq = RandomMoveThreshold * RandomMoveThreshold;
 
-		_player = GetTree().GetFirstNodeInGroup("Player") as Node2D;
+		_player = GetTree().GetFirstNodeInGroup("Player") as PlayerEntity;
 
 		_isChasing = false;
 		_targetLocation = RandomLocation();
 
         _movementVelocity = new Vector2(0, 0);
         _isMoving = false;
-    }
+
+        CurrentHealth = MaxHealth;
+	}
 
 	public override void _Process(double delta)
 	{
@@ -47,7 +55,6 @@ public partial class EnemyEntity : CharacterBody2D, IPausable
 	{
 		if (_paused) return;
 		if (_player == null) return;
-
 
         float distanceSq = GlobalPosition.DistanceSquaredTo(_player.GlobalPosition);
 
@@ -66,10 +73,10 @@ public partial class EnemyEntity : CharacterBody2D, IPausable
 		else
 		{
 			Vector2 direction = GlobalPosition.DirectionTo(_player.GlobalPosition);
-            float velocityChange = MaximumVelocity / Inertia;
+            float velocityChange = MaxVelocity / Inertia;
 			_movementVelocity = _movementVelocity += (direction * velocityChange);
-			_movementVelocity = _movementVelocity.LimitLength(MaximumVelocity);
-            _movementVelocity = _movementVelocity.Clamp(-MaximumVelocity, MaximumVelocity);
+			_movementVelocity = _movementVelocity.LimitLength(MaxVelocity);
+            _movementVelocity = _movementVelocity.Clamp(-MaxVelocity, MaxVelocity);
         }
 
         Move(delta);
@@ -81,20 +88,20 @@ public partial class EnemyEntity : CharacterBody2D, IPausable
 		if (GlobalPosition.DistanceSquaredTo(_targetLocation) < 100 || Velocity == Vector2.Zero) _targetLocation = RandomLocation();
 		
 		Vector2 direction = GlobalPosition.DirectionTo(_targetLocation);
-        float velocityChange = MaximumVelocity / Inertia;
+        float velocityChange = MaxVelocity / Inertia;
         _movementVelocity = _movementVelocity += (direction * velocityChange);
-        _movementVelocity = _movementVelocity.LimitLength(MaximumVelocity);
-        _movementVelocity = _movementVelocity.Clamp(-MaximumVelocity, MaximumVelocity);
+        _movementVelocity = _movementVelocity.LimitLength(MaxVelocity);
+        _movementVelocity = _movementVelocity.Clamp(-MaxVelocity, MaxVelocity);
         Move(delta);
     }
 
 	private void ApproachPlayer(double delta)
 	{
 		Vector2 direction = GlobalPosition.DirectionTo(_player.GlobalPosition);
-        float velocityChange = MaximumVelocity / Inertia;
+        float velocityChange = MaxVelocity / Inertia;
         _movementVelocity = _movementVelocity += (direction * velocityChange);
-        _movementVelocity = _movementVelocity.LimitLength(MaximumVelocity);
-        _movementVelocity = _movementVelocity.Clamp(-MaximumVelocity, MaximumVelocity);
+        _movementVelocity = _movementVelocity.LimitLength(MaxVelocity);
+        _movementVelocity = _movementVelocity.Clamp(-MaxVelocity, MaxVelocity);
         Move(delta);
 		_targetLocation = RandomLocation();
 	}
@@ -132,7 +139,18 @@ public partial class EnemyEntity : CharacterBody2D, IPausable
 		return new Vector2(Position.X + _rng.RandfRange(-500, 500), Position.Y + _rng.RandfRange(-500, 500));
 	}
 	
-	// INTERFACE
+	// INTERFACES
+	public bool TakeDamage(CharacterBody2D source, float damage)
+	{
+		if (source.GetType() == typeof(PlayerEntity))
+		{
+			CurrentHealth = Math.Max(0.0F, (CurrentHealth - damage));
+			return true;
+		}
+
+		return false;
+	}
+
 	public void Pause()
 	{
 		_paused = true;

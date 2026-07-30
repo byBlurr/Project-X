@@ -1,7 +1,10 @@
+using System;
+using System.Diagnostics;
 using Godot;
+using ProjectX.Interfaces;
 using Vector2 = Godot.Vector2;
 
-public partial class PlayerEntity : CharacterBody2D, IDebuggable, IPausable
+public partial class PlayerEntity : CharacterBody2D, IHurtable, IDebuggable, IPausable
 {
 	private bool _paused;
 	
@@ -32,7 +35,7 @@ public partial class PlayerEntity : CharacterBody2D, IDebuggable, IPausable
 	public float CurrentAdrenaline { get; private set; }
 
 	// Movement
-	[Export] public float MaximumVelocity = 2.0F;
+	[Export] public float MaxVelocity = 2.0F;
 	[Export] public float Inertia = 40.0F;
 	[Export] public float Deceleration = 12.0F;
 	[Export] public float SprintVelocityModifier = 2.3F;
@@ -151,7 +154,7 @@ public partial class PlayerEntity : CharacterBody2D, IDebuggable, IPausable
 		else CurrentArmStamina = Mathf.Min(MaxArmStamina, CurrentArmStamina + (ArmStaminaRegen * (float)delta));
 		
 		bool isSprinting = Input.IsActionPressed("sprint") && !_isAiming && CurrentStamina > 0.0f;
-		float velocityChange = MaximumVelocity / Inertia;
+		float velocityChange = MaxVelocity / Inertia;
 		if (isSprinting) velocityChange = velocityChange * SprintVelocityModifier;
 
 		_isMoving = Input.IsActionPressed("move_up") || Input.IsActionPressed("move_down") || Input.IsActionPressed("move_left") || Input.IsActionPressed("move_right");
@@ -168,12 +171,12 @@ public partial class PlayerEntity : CharacterBody2D, IDebuggable, IPausable
 			if (Input.IsActionPressed("move_right")) _movementVelocity += new Vector2(velocityChange, 0);
 		}
 
-		float maxCurrentSpeed = isSprinting ? MaximumVelocity * SprintVelocityModifier : MaximumVelocity;
+		float maxCurrentSpeed = isSprinting ? MaxVelocity * SprintVelocityModifier : MaxVelocity;
 		maxCurrentSpeed = ApplyAimPenalty(maxCurrentSpeed);
 		_movementVelocity = _movementVelocity.LimitLength(maxCurrentSpeed);
 
-		if (!isSprinting) _movementVelocity = _movementVelocity.Clamp(-MaximumVelocity, MaximumVelocity);
-		else _movementVelocity = _movementVelocity.Clamp(-MaximumVelocity * SprintVelocityModifier, MaximumVelocity * SprintVelocityModifier);
+		if (!isSprinting) _movementVelocity = _movementVelocity.Clamp(-MaxVelocity, MaxVelocity);
+		else _movementVelocity = _movementVelocity.Clamp(-MaxVelocity * SprintVelocityModifier, MaxVelocity * SprintVelocityModifier);
 
 		if (_isAiming) SmoothLookAtMouse(delta);
 		else LookTowardsVelocity(delta);
@@ -327,6 +330,17 @@ public partial class PlayerEntity : CharacterBody2D, IDebuggable, IPausable
 
 
 	// --- INTERFACES  ---
+	public bool TakeDamage(CharacterBody2D source, float damage)
+	{
+		if (source.GetType() == typeof(EnemyEntity))
+		{
+			CurrentHealth = Math.Max(0.0F, (CurrentHealth - damage));
+			return true;
+		}
+
+		return false;
+	}
+	
 	public string GetDebugText()
 	{
 		return $"[PLAYERENTITY]\n" +
