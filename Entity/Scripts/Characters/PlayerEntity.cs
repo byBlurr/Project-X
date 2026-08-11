@@ -357,9 +357,11 @@ public partial class PlayerEntity : CharacterBody2D, IHurtable, IDebuggable, IPa
 		{
 			case Actions.HIT_TARGET:
 				_currentHits++;
+				_currentMoney += 10;
 				return;
 			case Actions.KILLED_TARGET:
 				_currentKills++;
+				_currentMoney += 25;
 				return;
 			default:
 				return;
