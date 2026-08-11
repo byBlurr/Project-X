@@ -196,7 +196,14 @@ public partial class PlayerEntity : CharacterBody2D, IHurtable, IDebuggable, IPa
 		if (Input.IsActionJustPressed("shoot"))
 		{
 			_currentShots++;
-			_playerWeapon.Shoot();
+
+			float currentSpeed = Mathf.Clamp(_movementVelocity.Length(), 0.0f, MaxVelocity);
+			float currentStamina = Mathf.Clamp(CurrentArmStamina, 0.0f, 100.0f);
+			float movementFactor = 1.0f - (currentSpeed / MaxVelocity);
+			float staminaFactor = currentStamina / 100.0f;
+			float modifier = (0.25f * movementFactor) + (0.75f * staminaFactor);
+			
+			_playerWeapon.Shoot(modifier);
 		}
 		
 		if (_isAiming) SmoothLookAtMouse(delta);
