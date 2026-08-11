@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using Godot;
+using ProjectX.Enums;
 using ProjectX.Interfaces;
 using Vector2 = Godot.Vector2;
 
@@ -35,6 +36,12 @@ public partial class PlayerEntity : CharacterBody2D, IHurtable, IDebuggable, IPa
 	public float CurrentArmStamina { get; private set; }
 	public float CurrentAdrenaline { get; private set; }
 
+	// State
+	private int _currentMoney;
+	private int _currentKills;
+	private int _currentShots;
+	private int _currentHits;
+	
 	// Movement
 	[Export] public float MaxVelocity = 2.0F;
 	[Export] public float Inertia = 40.0F;
@@ -97,6 +104,11 @@ public partial class PlayerEntity : CharacterBody2D, IHurtable, IDebuggable, IPa
 		_movementVelocity = new Vector2(0, 0);
 		_isMoving = false;
 		_isAiming = false;
+
+		_currentMoney = 0;
+		_currentKills = 0;
+		_currentHits = 0;
+		_currentShots = 0;
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -181,7 +193,11 @@ public partial class PlayerEntity : CharacterBody2D, IHurtable, IDebuggable, IPa
 		if (!isSprinting) _movementVelocity = _movementVelocity.Clamp(-MaxVelocity, MaxVelocity);
 		else _movementVelocity = _movementVelocity.Clamp(-MaxVelocity * SprintVelocityModifier, MaxVelocity * SprintVelocityModifier);
 
-		if (Input.IsActionJustPressed("shoot"))_playerWeapon.Shoot();
+		if (Input.IsActionJustPressed("shoot"))
+		{
+			_currentShots++;
+			_playerWeapon.Shoot();
+		}
 		
 		if (_isAiming) SmoothLookAtMouse(delta);
 		else LookTowardsVelocity(delta);
@@ -327,6 +343,22 @@ public partial class PlayerEntity : CharacterBody2D, IHurtable, IDebuggable, IPa
 		}
 	}
 
+	public void AddPlayerStat(Actions action)
+	{
+		Console.WriteLine(action);
+		switch (action)
+		{
+			case Actions.HIT_TARGET:
+				_currentHits++;
+				return;
+			case Actions.KILLED_TARGET:
+				_currentKills++;
+				return;
+			default:
+				return;
+		}
+	}
+
 
 	// --- INTERFACES  ---
 	public bool TakeDamage(Node2D source, float damage)
@@ -341,7 +373,9 @@ public partial class PlayerEntity : CharacterBody2D, IHurtable, IDebuggable, IPa
 		return $"[PLAYERENTITY]\n" +
 			   $"Health: {CurrentHealth:F1} / {MaxHealth}\n" +
 			   $"Stamina: {CurrentStamina:F1} / {MaxStamina}\n" +
-			   $"Adrenaline: {CurrentAdrenaline:F1} / {MaxAdrenaline}\n" +
+			   $"Adrenaline: {CurrentAdrenaline:F1} / {MaxAdrenaline}\n\n" +
+			   $"Money: {_currentMoney:F1}\n" +
+			   $"Shots: {_currentShots:F1} Hits: {_currentHits:F1} Kills: {_currentKills:F1} ({((float)_currentHits / (float)_currentShots) * 100.0F}%)\n\n" +
 			   $"Velocity: {_movementVelocity.Length():F2}\n" +
 			   $"Is Dashing: {IsDashing} | Dash Timer: {_dashTimer:F2}\n" +
 			   $"Zoom: {_playerCamera.Zoom}";

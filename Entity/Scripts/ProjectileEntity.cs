@@ -2,10 +2,13 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using ProjectX.Enums;
 using ProjectX.Interfaces;
 
 public partial class ProjectileEntity : Node2D
 {
+	private PlayerEntity _player;
+	
 	[Export] public float MaxVelocity = 5000.0F;
 	[Export] public float MinVelocity = 100.0F;
 	[Export] public float Deceleration = 350.0F;
@@ -26,6 +29,7 @@ public partial class ProjectileEntity : Node2D
 	
 	public override void _Ready()
 	{
+		_player = GetTree().CurrentScene.GetNode<PlayerEntity>("PlayerEntity");
 		_direction = Vector2.FromAngle(Rotation);
 		_currentVelocity = MaxVelocity;
 	}
@@ -54,10 +58,7 @@ public partial class ProjectileEntity : Node2D
 		{
 			GodotObject collider = CollisionRaycast.GetCollider();
 			if (_hitTargets.Contains(collider)) return;
-			if (collider is IHurtable hurtBody)
-			{
-				Penetrate(collider as CharacterBody2D);
-			}
+			if ((collider is IHurtable hurtBody)) Penetrate(collider as CharacterBody2D);
 		}
 	}
 
@@ -66,6 +67,7 @@ public partial class ProjectileEntity : Node2D
 	{
 		if (ProjectileOwner == body) return; // Will this stop self harm? TODO Test
 		_hitTargets.Add(body);
+		_player.AddPlayerStat(Actions.HIT_TARGET);
 		if (body is IHurtable hurtBody)
 		{
 			float speedPercentage = (_currentVelocity / MaxVelocity);

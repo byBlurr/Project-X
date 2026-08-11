@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using Godot;
+using ProjectX.Enums;
 using ProjectX.Interfaces;
 
 public partial class EnemyEntity : CharacterBody2D, IHurtable, IPausable
@@ -50,7 +51,11 @@ public partial class EnemyEntity : CharacterBody2D, IHurtable, IPausable
 	{
 		if (_paused) return;
         if (_player == null) return;
-        if (CurrentHealth <= 0) QueueFree();
+        if (CurrentHealth <= 0)
+        {
+	        _player.AddPlayerStat(Actions.KILLED_TARGET);
+	        QueueFree();
+        }
     }
 
 	public override void _PhysicsProcess(double delta)
