@@ -10,6 +10,7 @@ public partial class PauseMenu : Control
 	{
 		_gameController = GetTree().CurrentScene as GameController;
 		GetNode<Button>("VBoxContainer/ResumeButton").Pressed += OnResumeButtonPressed;
+		GetNode<Button>("VBoxContainer/MainMenuButton").Pressed += OnMainMenuButtonPressed;
 		GetNode<Button>("VBoxContainer/ExitButton").Pressed += OnExitButtonPressed;
 	}
 
@@ -21,6 +22,11 @@ public partial class PauseMenu : Control
 	private void OnResumeButtonPressed()
 	{
 		_gameController.PauseGame();
+	}
+	
+	private void OnMainMenuButtonPressed()
+	{
+		// TODO
 	}
 	
 	private void OnExitButtonPressed()
