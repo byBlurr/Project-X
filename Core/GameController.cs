@@ -63,7 +63,7 @@ public partial class GameController : Node2D
         _adrenalineBar.AddThemeStyleboxOverride("fill", _adrenalineStyle);
     }
 
-	private void PauseGame()
+	public void PauseGame()
 	{
 		_isPaused = !_isPaused;
 		_pauseUi.Visible = _isPaused;
